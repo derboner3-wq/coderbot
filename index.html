@@ -3,41 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Обучальник</title>
+    <title>Обучальник программированию</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: system-ui; background: #0b0e14; color: #fff; padding: 16px; max-width: 500px; margin: auto; }
-        .lives { display: flex; align-items: center; gap: 8px; background: #1e293b; padding: 8px 16px; border-radius: 40px; margin-bottom: 16px; }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #0b0e14;
+            color: #f0f4fa;
+            padding: 16px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .lives {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #1e293b;
+            padding: 8px 16px;
+            border-radius: 40px;
+            margin-bottom: 16px;
+            font-size: 20px;
+        }
         .lives span { color: #ef4444; }
-        .restore-btn { background: #22c55e; border: none; color: #fff; padding: 4px 16px; border-radius: 40px; cursor: pointer; font-weight: 600; }
+        .restore-btn {
+            background: #22c55e;
+            border: none;
+            color: #fff;
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+        }
         .timer { font-size: 14px; color: #94a3b8; margin-left: auto; }
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
-        .menu-btn { background: #1e293b; padding: 20px 10px; border: none; border-radius: 20px; color: #fff; font-size: 18px; cursor: pointer; border-bottom: 4px solid #f97316; text-align: center; }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .menu-btn {
+            background: #1e293b;
+            padding: 20px 10px;
+            border: none;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 4px solid #f97316;
+            text-align: center;
+        }
         .menu-btn:active { transform: scale(0.96); }
         .hidden { display: none !important; }
-        .back-btn { background: none; border: none; color: #f97316; font-size: 18px; cursor: pointer; margin-bottom: 12px; padding: 6px 0; }
-        .progress-bar { background: #1e293b; height: 8px; border-radius: 20px; margin: 12px 0; overflow: hidden; }
-        .progress-fill { background: #f97316; height: 100%; width: 0%; transition: width 0.4s; }
-        .lesson-card { background: #1e293b; border-radius: 24px; padding: 24px 20px; }
-        .lesson-title { font-size: 22px; font-weight: 700; color: #fbbf24; margin-bottom: 12px; }
-        .theory { background: #0f172a; padding: 16px; border-radius: 16px; border-left: 4px solid #f97316; white-space: pre-wrap; line-height: 1.8; }
-        .task-box { background: #0f172a; padding: 16px; border-radius: 16px; margin-top: 12px; }
-        .task-box .question { font-weight: 500; margin-bottom: 8px; }
-        .task-instruction { font-size: 15px; color: #e2e8f0; background: #1e293b; padding: 12px; border-radius: 12px; margin: 8px 0; line-height: 1.7; }
-        .input-area { display: flex; gap: 10px; margin: 10px 0; }
-        .input-area input { flex: 1; padding: 14px 18px; border-radius: 40px; border: none; background: #1e293b; color: #fff; font-size: 16px; outline: 1px solid #334155; }
+        .back-btn {
+            background: none;
+            border: none;
+            color: #f97316;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 12px;
+            padding: 6px 0;
+        }
+        .progress-bar {
+            background: #1e293b;
+            height: 8px;
+            border-radius: 20px;
+            margin: 12px 0 16px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: #f97316;
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s;
+        }
+        .lesson-card {
+            background: #1e293b;
+            border-radius: 24px;
+            padding: 24px 20px;
+        }
+        .lesson-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fbbf24;
+            margin-bottom: 12px;
+        }
+        .theory {
+            background: #0f172a;
+            padding: 16px;
+            border-radius: 16px;
+            border-left: 4px solid #f97316;
+            white-space: pre-wrap;
+            line-height: 1.8;
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+        .task-box {
+            background: #0f172a;
+            padding: 16px;
+            border-radius: 16px;
+            margin-top: 12px;
+        }
+        .task-box .question {
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+        .task-instruction {
+            font-size: 15px;
+            color: #e2e8f0;
+            background: #1e293b;
+            padding: 12px;
+            border-radius: 12px;
+            margin: 8px 0;
+            line-height: 1.7;
+        }
+        .input-area {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .input-area input {
+            flex: 1;
+            padding: 14px 18px;
+            border-radius: 40px;
+            border: none;
+            background: #1e293b;
+            color: #fff;
+            font-size: 16px;
+            outline: 1px solid #334155;
+        }
         .input-area input:focus { outline: 2px solid #f97316; }
-        .input-area button { padding: 14px 24px; border: none; border-radius: 40px; background: #f97316; color: #fff; font-weight: 600; cursor: pointer; }
-        .action-buttons { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
-        .action-btn { padding: 12px 20px; border: none; border-radius: 40px; background: #334155; color: #fff; font-weight: 600; cursor: pointer; flex: 1; min-width: 80px; }
-        .nav-buttons { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
-        .nav-btn { padding: 12px 20px; border: none; border-radius: 40px; background: #475569; color: #fff; font-weight: 600; cursor: pointer; flex: 1; min-width: 80px; }
-        .feedback { margin: 12px 0; font-size: 18px; font-weight: 500; text-align: center; }
+        .input-area button {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 40px;
+            background: #f97316;
+            color: #fff;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 40px;
+            background: #334155;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+            min-width: 80px;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 40px;
+            background: #475569;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+            min-width: 80px;
+        }
+        .feedback {
+            margin: 12px 0;
+            font-size: 18px;
+            font-weight: 500;
+            text-align: center;
+        }
         .correct { color: #4ade80; }
         .wrong { color: #f87171; }
         .info { color: #60a5fa; }
-        .intro-text { background: #0f172a; padding: 16px; border-radius: 16px; border-left: 4px solid #f59e0b; white-space: pre-wrap; line-height: 1.8; }
-        .footer { margin-top: 20px; font-size: 14px; color: #64748b; text-align: center; }
+        .intro-text {
+            background: #0f172a;
+            padding: 16px;
+            border-radius: 16px;
+            border-left: 4px solid #f59e0b;
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #64748b;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -50,7 +215,7 @@
 
     <div id="menuScreen">
         <h1 style="text-align:center;">🧠 Обучальник</h1>
-        <div style="text-align:center;color:#94a3b8;margin-bottom:20px;">Выбери язык и начни с нуля</div>
+        <div style="text-align:center;color:#94a3b8;margin-bottom:20px;">Выбери язык</div>
         <div class="menu-grid">
             <button class="menu-btn" data-lang="html">🟧 HTML</button>
             <button class="menu-btn" data-lang="css">🟦 CSS</button>
@@ -60,11 +225,11 @@
         <div style="text-align:center;color:#64748b;font-size:14px;margin-top:20px;">Прогресс и жизни сохраняются</div>
     </div>
 
-    <div id="lessonScreen" class="hidden">
+    <div id="lessonScreen">
         <button class="back-btn" id="backBtn">← Назад к выбору</button>
         <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
         <div class="lesson-card">
-            <div class="lesson-title" id="lessonTitle">Вступление</div>
+            <div class="lesson-title" id="lessonTitle">Загрузка...</div>
             <div id="contentArea"></div>
             <div id="taskArea" class="hidden">
                 <div class="task-box">
@@ -93,7 +258,7 @@
 
     <script>
         // ============================================================
-        //  БАЗА УРОКОВ (по 10 на каждый язык) с вступлениями, теорией, инструкциями
+        //  БАЗА УРОКОВ (по 10 на каждый язык)
         // ============================================================
         const COURSES = {
             html: {
@@ -265,7 +430,7 @@
         function selectLanguage(lang) {
             state.currentLang = lang;
             menuScreen.classList.add('hidden');
-            lessonScreen.classList.remove('hidden');
+            // lessonScreen уже виден, мы просто перерисовываем
             if (state.completed[lang] === 0 && state.lessonIndex[lang] === 0) {
                 const course = COURSES[lang];
                 document.getElementById('lessonTitle').textContent = `Вступление к ${course.name}`;
@@ -361,16 +526,20 @@
         }
 
         function goToMenu() {
-            lessonScreen.classList.add('hidden');
             menuScreen.classList.remove('hidden');
+            // Не скрываем lessonScreen, просто показываем меню
         }
 
         // ============================================================
-        //  ИНИЦИАЛИЗАЦИЯ И ОБРАБОТЧИКИ
+        //  ИНИЦИАЛИЗАЦИЯ — ПРИ ОТКРЫТИИ ПОКАЗЫВАЕМ HTML С ВСТУПЛЕНИЕМ
         // ============================================================
         loadState();
         updateLivesDisplay();
 
+        // Автоматически выбираем HTML и показываем вступление
+        selectLanguage('html');
+
+        // Таймер для автовосстановления
         setInterval(() => {
             if (state.lives < 3 && (Date.now() - state.lastLostTime) >= 10 * 60 * 1000) {
                 state.lives++;
@@ -382,6 +551,9 @@
             updateLivesDisplay();
         }, 1000);
 
+        // ============================================================
+        //  ОБРАБОТЧИКИ
+        // ============================================================
         document.querySelectorAll('.menu-btn').forEach(btn => {
             btn.addEventListener('click', () => selectLanguage(btn.dataset.lang));
         });

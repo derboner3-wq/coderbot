@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>HTML-тренажёр</title>
+  <title>Тренажёр по программированию</title>
   <style>
     * {
       box-sizing: border-box;
@@ -27,21 +27,73 @@
     h1 {
       text-align: center;
       font-size: 28px;
-      margin: 0 0 20px;
+      margin: 0 0 8px;
       background: linear-gradient(135deg, #f59e0b, #f97316);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .badge {
-      display: inline-block;
-      background: #f97316;
-      color: #0b0e14;
-      padding: 4px 16px;
-      border-radius: 20px;
-      font-weight: 700;
-      font-size: 14px;
-      margin-bottom: 16px;
+    .subtitle {
+      text-align: center;
+      color: #94a3b8;
+      margin-bottom: 24px;
+      font-size: 16px;
     }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .menu-btn {
+      background: #1e293b;
+      padding: 20px 12px;
+      border-radius: 20px;
+      border: none;
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .menu-btn:active { transform: scale(0.96); }
+    .menu-btn .icon { font-size: 32px; display: block; margin-bottom: 6px; }
+    .menu-btn .label { font-size: 14px; opacity: 0.7; }
+    .menu-btn.html { border-bottom: 4px solid #e34c26; }
+    .menu-btn.css { border-bottom: 4px solid #264de4; }
+    .menu-btn.js { border-bottom: 4px solid #f7df1e; color: #f7df1e; }
+    .menu-btn.python { border-bottom: 4px solid #3776ab; }
+
+    /* Экран заданий */
+    .task-screen {
+      display: none;
+    }
+    .task-screen.active {
+      display: block;
+    }
+    .menu-screen {
+      display: block;
+    }
+    .menu-screen.hidden {
+      display: none;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: #f97316;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 16px;
+      padding: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .back-btn:active { opacity: 0.6; }
+
     .card {
       background: #1e293b;
       border-radius: 24px;
@@ -141,67 +193,123 @@
       color: #64748b;
       text-align: center;
     }
-    .telegram-close {
-      display: block;
-      width: 100%;
-      padding: 14px;
-      margin-top: 12px;
-      background: #ef4444;
-      border: none;
-      border-radius: 40px;
-      color: white;
+    .lang-badge {
+      display: inline-block;
+      background: #f97316;
+      color: #0b0e14;
+      padding: 4px 16px;
+      border-radius: 20px;
       font-weight: 700;
-      font-size: 16px;
-      cursor: pointer;
+      font-size: 14px;
+      margin-bottom: 12px;
     }
   </style>
 </head>
 <body>
 <div class="container">
-  <h1>🧩 HTML-тренажёр</h1>
-  <div class="badge">🌐 Программирование</div>
 
-  <div class="card" id="card">
-    <div class="question" id="question">Загружаем...</div>
-    <div id="extra"></div>
+  <!-- ГЛАВНОЕ МЕНЮ -->
+  <div id="menuScreen" class="menu-screen">
+    <h1>🧩 Тренажёр</h1>
+    <div class="subtitle">Выбери язык программирования</div>
+    <div class="menu-grid">
+      <button class="menu-btn html" data-lang="html">
+        <span class="icon">🟧</span> HTML
+        <span class="label">разметка</span>
+      </button>
+      <button class="menu-btn css" data-lang="css">
+        <span class="icon">🟦</span> CSS
+        <span class="label">стили</span>
+      </button>
+      <button class="menu-btn js" data-lang="js">
+        <span class="icon">🟨</span> JavaScript
+        <span class="label">логика</span>
+      </button>
+      <button class="menu-btn python" data-lang="python">
+        <span class="icon">🐍</span> Python
+        <span class="label">скрипты</span>
+      </button>
+    </div>
   </div>
 
-  <div class="input-area">
-    <input type="text" id="userInput" placeholder="Введи HTML-код...">
-    <button id="checkBtn">Проверить</button>
+  <!-- ЭКРАН ЗАДАНИЙ -->
+  <div id="taskScreen" class="task-screen">
+    <button class="back-btn" id="backBtn">← Назад к выбору</button>
+    <div class="lang-badge" id="currentLangBadge">HTML</div>
+
+    <div class="card" id="card">
+      <div class="question" id="question">Загружаем...</div>
+      <div id="extra"></div>
+    </div>
+
+    <div class="input-area">
+      <input type="text" id="userInput" placeholder="Введи код...">
+      <button id="checkBtn">Проверить</button>
+    </div>
+
+    <div class="actions">
+      <button class="action-btn" id="nextBtn">➡️ Следующее</button>
+      <button class="action-btn" id="hintBtn">💡 Подсказка</button>
+      <button class="action-btn" id="revealBtn">👀 Показать ответ</button>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+    <div class="footer">Клик по карточке — показать ответ</div>
   </div>
 
-  <div class="actions">
-    <button class="action-btn" id="nextBtn">➡️ Следующее</button>
-    <button class="action-btn" id="hintBtn">💡 Подсказка</button>
-    <button class="action-btn" id="revealBtn">👀 Показать ответ</button>
-  </div>
-
-  <div class="feedback" id="feedback"></div>
-  <button class="telegram-close" id="closeBtn">✖ Закрыть тренажёр</button>
-  <div class="footer">Клик по карточке — показать ответ</div>
 </div>
 
 <script>
-  // ---------- БАЗА ЗАДАНИЙ (HTML) ----------
-  const TASKS = [
-    { q: "Создай заголовок h1 с текстом 'Привет'", a: "<h1>Привет</h1>", hint: "Тег h1" },
-    { q: "Создай абзац текста", a: "<p>Текст</p>", hint: "Тег p" },
-    { q: "Вставь картинку cat.jpg", a: "<img src='cat.jpg'>", hint: "Тег img, атрибут src" },
-    { q: "Ссылка на example.com с текстом 'Нажми'", a: "<a href='https://example.com'>Нажми</a>", hint: "Тег a, href" },
-    { q: "Ненумерованный список: Яблоко, Банан", a: "<ul><li>Яблоко</li><li>Банан</li></ul>", hint: "ul и li" },
-    { q: "Жирный текст 'Важно'", a: "<b>Важно</b>", hint: "Тег b или strong" },
-    { q: "Кнопка с текстом 'Отправить'", a: "<button>Отправить</button>", hint: "Тег button" },
-    { q: "Горизонтальная линия", a: "<hr>", hint: "Тег hr" },
-    { q: "Перенос строки", a: "<br>", hint: "Тег br" },
-    { q: "Таблица с одной строкой и двумя ячейками", a: "<table><tr><td>1</td><td>2</td></tr></table>", hint: "table, tr, td" }
-  ];
+  // ---------- БАЗЫ ЗАДАНИЙ ПО ЯЗЫКАМ ----------
+  const TASKS = {
+    html: [
+      { q: "Создай заголовок h1 с текстом 'Привет'", a: "<h1>Привет</h1>", hint: "Тег h1" },
+      { q: "Создай абзац текста", a: "<p>Текст</p>", hint: "Тег p" },
+      { q: "Вставь картинку cat.jpg", a: "<img src='cat.jpg'>", hint: "Тег img, атрибут src" },
+      { q: "Ссылка на example.com с текстом 'Нажми'", a: "<a href='https://example.com'>Нажми</a>", hint: "Тег a, href" },
+      { q: "Ненумерованный список: Яблоко, Банан", a: "<ul><li>Яблоко</li><li>Банан</li></ul>", hint: "ul и li" },
+      { q: "Жирный текст 'Важно'", a: "<b>Важно</b>", hint: "Тег b или strong" },
+      { q: "Кнопка с текстом 'Отправить'", a: "<button>Отправить</button>", hint: "Тег button" },
+      { q: "Горизонтальная линия", a: "<hr>", hint: "Тег hr" },
+      { q: "Перенос строки", a: "<br>", hint: "Тег br" },
+      { q: "Таблица с одной строкой и двумя ячейками", a: "<table><tr><td>1</td><td>2</td></tr></table>", hint: "table, tr, td" }
+    ],
+    css: [
+      { q: "Сделай текст красным", a: "color: red;", hint: "Свойство color" },
+      { q: "Установи фон синим", a: "background-color: blue;", hint: "background-color" },
+      { q: "Увеличь размер шрифта до 20px", a: "font-size: 20px;", hint: "font-size" },
+      { q: "Сделай текст жирным", a: "font-weight: bold;", hint: "font-weight" },
+      { q: "Добавь рамку 1px сплошную чёрную", a: "border: 1px solid black;", hint: "border" },
+      { q: "Сделай элементы по центру", a: "text-align: center;", hint: "text-align" },
+      { q: "Установи ширину 100%", a: "width: 100%;", hint: "width" },
+      { q: "Сделай скругление углов 10px", a: "border-radius: 10px;", hint: "border-radius" }
+    ],
+    js: [
+      { q: "Объяви переменную x со значением 5", a: "let x = 5;", hint: "let или var" },
+      { q: "Выведи в консоль 'Привет'", a: "console.log('Привет');", hint: "console.log" },
+      { q: "Создай функцию, которая возвращает сумму двух чисел", a: "function sum(a,b) { return a+b; }", hint: "function" },
+      { q: "Условный оператор: если x > 10, вывести 'больше'", a: "if (x > 10) { console.log('больше'); }", hint: "if" },
+      { q: "Цикл for от 0 до 4", a: "for (let i=0; i<5; i++) { }", hint: "for" },
+      { q: "Создай массив из трёх чисел", a: "[1, 2, 3]", hint: "квадратные скобки" }
+    ],
+    python: [
+      { q: "Выведи на экран 'Привет, мир!'", a: "print('Привет, мир!')", hint: "print()" },
+      { q: "Создай переменную x = 10", a: "x = 10", hint: "просто присвоить" },
+      { q: "Функция, складывающая два числа", a: "def sum(a,b):\n    return a+b", hint: "def и return" },
+      { q: "Условие if a > b: вывести 'больше'", a: "if a > b:\n    print('больше')", hint: "if и отступ" },
+      { q: "Создай список из чисел 1,2,3", a: "[1, 2, 3]", hint: "квадратные скобки" },
+      { q: "Цикл for i in range(5): вывести i", a: "for i in range(5):\n    print(i)", hint: "for и range" }
+    ]
+  };
 
-  // Состояние
+  // ---------- СОСТОЯНИЕ ----------
+  let currentLang = 'html';
   let currentTask = null;
   let isFlipped = false;
 
   // DOM
+  const menuScreen = document.getElementById('menuScreen');
+  const taskScreen = document.getElementById('taskScreen');
   const questionEl = document.getElementById('question');
   const extraEl = document.getElementById('extra');
   const feedbackEl = document.getElementById('feedback');
@@ -211,16 +319,18 @@
   const hintBtn = document.getElementById('hintBtn');
   const revealBtn = document.getElementById('revealBtn');
   const card = document.getElementById('card');
-  const closeBtn = document.getElementById('closeBtn');
+  const backBtn = document.getElementById('backBtn');
+  const langBadge = document.getElementById('currentLangBadge');
 
-  // Вспомогательные функции
-  function getRandomTask() {
-    return TASKS[Math.floor(Math.random() * TASKS.length)];
+  // ---------- ФУНКЦИИ ----------
+  function getRandomTask(lang) {
+    const tasks = TASKS[lang];
+    return tasks[Math.floor(Math.random() * tasks.length)];
   }
 
   function render() {
     if (!currentTask) {
-      currentTask = getRandomTask();
+      currentTask = getRandomTask(currentLang);
       isFlipped = false;
     }
     feedbackEl.textContent = '';
@@ -233,6 +343,7 @@
     } else {
       extraEl.innerHTML = `<div class="hint-text">💡 Нажми «Показать ответ» или кликни по карточке</div>`;
     }
+    langBadge.textContent = currentLang.toUpperCase();
   }
 
   function showFeedback(text, isCorrect) {
@@ -247,10 +358,9 @@
       showFeedback('✏️ Введи код в поле!', false);
       return;
     }
-    // Сравниваем, удаляя лишние пробелы и переносы в начале/конце
-    const normalizedUser = userAnswer.replace(/\s+/g, ' ').trim();
-    const normalizedCorrect = currentTask.a.replace(/\s+/g, ' ').trim();
-    if (normalizedUser === normalizedCorrect) {
+    // Сравниваем с удалением лишних пробелов и переносов
+    const normalize = s => s.replace(/\s+/g, ' ').trim();
+    if (normalize(userAnswer) === normalize(currentTask.a)) {
       showFeedback('✅ Правильно! Отлично! 🎉', true);
     } else {
       showFeedback(`❌ Неверно. Правильный ответ: ${currentTask.a}`, false);
@@ -258,7 +368,7 @@
   }
 
   function nextTask() {
-    currentTask = getRandomTask();
+    currentTask = getRandomTask(currentLang);
     isFlipped = false;
     render();
   }
@@ -277,31 +387,40 @@
     feedbackEl.className = 'feedback';
   }
 
-  // Закрытие приложения (для Telegram Web App)
-  function closeApp() {
-    if (window.Telegram && window.Telegram.WebApp) {
-      window.Telegram.WebApp.close();
-    } else {
-      alert('Закройте вкладку, чтобы выйти из приложения.');
-    }
+  function switchLanguage(lang) {
+    currentLang = lang;
+    currentTask = null;
+    isFlipped = false;
+    menuScreen.classList.add('hidden');
+    taskScreen.classList.add('active');
+    render();
   }
 
-  // Обработчики
+  function goToMenu() {
+    taskScreen.classList.remove('active');
+    menuScreen.classList.remove('hidden');
+  }
+
+  // ---------- ОБРАБОТЧИКИ ----------
+  document.querySelectorAll('.menu-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      switchLanguage(btn.dataset.lang);
+    });
+  });
+
+  backBtn.addEventListener('click', goToMenu);
   checkBtn.addEventListener('click', checkAnswer);
   nextBtn.addEventListener('click', nextTask);
   hintBtn.addEventListener('click', showHint);
   revealBtn.addEventListener('click', toggleReveal);
   card.addEventListener('click', toggleReveal);
-  closeBtn.addEventListener('click', closeApp);
 
   userInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') checkAnswer();
   });
 
-  // Инициализация
-  render();
-
-  // Сообщаем Telegram, что приложение готово (для Web App)
+  // ---------- СТАРТ (по умолчанию показываем меню) ----------
+  // Если используется как Telegram Web App, можно сразу показывать меню
   if (window.Telegram && window.Telegram.WebApp) {
     window.Telegram.WebApp.ready();
   }

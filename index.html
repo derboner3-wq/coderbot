@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Обучальник программированию</title>
   <style>
+    /* ===== СТИЛИ ===== */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: system-ui, -apple-system, sans-serif;
@@ -104,7 +105,7 @@
     }
     .theory {
       font-size: 16px;
-      line-height: 1.7;
+      line-height: 1.8;
       color: #e2e8f0;
       white-space: pre-wrap;
       margin-bottom: 16px;
@@ -130,6 +131,7 @@
     .step-list li {
       margin: 8px 0;
       list-style: decimal;
+      padding-left: 8px;
     }
     .task-box {
       background: #0f172a;
@@ -149,7 +151,7 @@
       padding: 12px;
       border-radius: 12px;
       margin: 8px 0;
-      line-height: 1.6;
+      line-height: 1.7;
     }
     .task-instruction strong {
       color: #fbbf24;
@@ -248,6 +250,7 @@
       color: #fbbf24;
       margin: 8px 0;
       white-space: pre-wrap;
+      font-size: 15px;
     }
   </style>
 </head>
@@ -283,9 +286,7 @@
     <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
     <div class="lesson-card">
       <div class="lesson-title" id="lessonTitle">Вступление</div>
-      <div id="contentArea">
-        <!-- сюда вставляется intro или теория -->
-      </div>
+      <div id="contentArea"></div>
       <div id="taskArea" class="hidden">
         <div class="task-box">
           <div class="question" id="taskQuestion">Задание</div>
@@ -310,13 +311,14 @@
 </div>
 
 <script>
-  // ---------- КУРСЫ С ПОДРОБНЫМИ ОБЪЯСНЕНИЯМИ ----------
+  // =====================================================
+  //  БОЛЬШАЯ БАЗА КУРСОВ С ПОДРОБНЫМИ ОБЪЯСНЕНИЯМИ
+  // =====================================================
   const COURSES = {
     html: {
       name: 'HTML',
       intro: `🌟 **Что такое HTML?**  
-  HTML — это язык, который создаёт каркас веб-страницы.  
-  Любой сайт состоит из HTML-кода, который пишется в виде **тегов**.
+  HTML — это язык, который создаёт каркас веб-страницы. Любой сайт состоит из HTML-кода, который пишется в виде **тегов**.
 
   🧐 **Что такое тег?**  
   Тег — это команда для браузера. Она заключается в угловые скобки: < и >.  
@@ -400,6 +402,42 @@
   1. Напиши <a href="https://google.com">  
   2. Напиши Поиск  
   3. Напиши </a>`
+        },
+        {
+          title: 'Картинка',
+          theory: `📚 **Теория**  
+  Картинки вставляются тегом <img>. Это одиночный тег (без закрывающего).  
+  Атрибут src указывает путь к файлу.  
+  Пример: <img src="foto.jpg">.
+
+  🖐️ **Как набрать?**  
+  <img src="cat.jpg"> — в поле ввода нужно написать именно это.`,
+          task: 'Вставь картинку с именем "cat.jpg"',
+          answer: '<img src="cat.jpg">',
+          hint: 'используй img и src',
+          instruction: `🔹 **Пошагово:**  
+  1. Напиши <img  
+  2. Пробел  
+  3. Напиши src="cat.jpg"  
+  4. Напиши >`
+        },
+        {
+          title: 'Список',
+          theory: `📚 **Теория**  
+  Ненумерованный список создаётся тегами <ul> (контейнер) и <li> (пункты).  
+  Пример:  
+  <ul>  
+    <li>Яблоко</li>  
+    <li>Банан</li>  
+  </ul>`,
+          task: 'Создай список с пунктами "Яблоко" и "Банан"',
+          answer: '<ul><li>Яблоко</li><li>Банан</li></ul>',
+          hint: 'ul и li',
+          instruction: `🔹 **Инструкция:**  
+  1. Напиши <ul>  
+  2. Напиши <li>Яблоко</li>  
+  3. Напиши <li>Банан</li>  
+  4. Напиши </ul>`
         }
       ]
     },
@@ -439,6 +477,34 @@
   5. Напиши color: red; (двоеточие и точка с запятой обязательны)  
   6. Пробел  
   7. Закрывающая фигурная скобка: }`
+        },
+        {
+          title: 'Фон',
+          theory: `📚 **Теория**  
+  Свойство background-color задаёт цвет фона.  
+  Пример: body { background-color: blue; } — сделает фон страницы синим.
+
+  🖐️ **Как писать?**  
+  body { background-color: blue; }`,
+          task: 'Сделай фон всей страницы синим (blue).',
+          answer: 'body { background-color: blue; }',
+          hint: 'body и background-color',
+          instruction: `🔹 **Инструкция:**  
+  1. Напиши body  
+  2. Пробел и {  
+  3. Напиши background-color: blue;  
+  4. }`
+        },
+        {
+          title: 'Размер шрифта',
+          theory: `📚 **Теория**  
+  Свойство font-size меняет размер текста.  
+  Пример: p { font-size: 20px; }`,
+          task: 'Установи размер шрифта 20px для всех параграфов.',
+          answer: 'p { font-size: 20px; }',
+          hint: 'p и font-size',
+          instruction: `🔹 **Пошагово:**  
+  p { font-size: 20px; }`
         }
       ]
     },
@@ -476,6 +542,26 @@
   5. Напиши 'Hello, world!' (кавычки)  
   6. Закрой скобку: )  
   7. Напиши ; (точка с запятой)`
+        },
+        {
+          title: 'Переменная',
+          theory: `📚 **Теория**  
+  Переменная хранит данные. Объявляется через let.  
+  Пример: let x = 5; — создаёт переменную x со значением 5.
+
+  🖐️ **Как писать?**  
+  let x = 5; — обрати внимание на пробелы и точку с запятой.`,
+          task: 'Объяви переменную "age" со значением 25.',
+          answer: 'let age = 25;',
+          hint: 'let age = 25;',
+          instruction: `🔹 **Инструкция:**  
+  1. Напиши let  
+  2. Пробел  
+  3. Напиши age  
+  4. Пробел  
+  5. Напиши =  
+  6. Пробел  
+  7. Напиши 25;`
         }
       ]
     },
@@ -507,23 +593,215 @@
   2. Открой скобку: (  
   3. Напиши 'Hello, Python!'  
   4. Закрой скобку: )`
+        },
+        {
+          title: 'Переменная',
+          theory: `📚 **Теория**  
+  В Python переменная создаётся просто: имя = значение.  
+  Пример: name = "Анна"`,
+          task: 'Создай переменную name со значением "Анна"',
+          answer: 'name = "Анна"',
+          hint: 'name = "Анна"',
+          instruction: `🔹 **Пошагово:**  
+  1. Напиши name  
+  2. Пробел, =, пробел  
+  3. Напиши "Анна" (в кавычках)`
         }
       ]
     }
   };
 
-  // ---------- СОСТОЯНИЕ ----------
+  // ---------- ЛОГИКА ПРИЛОЖЕНИЯ (ОСТАЛЬНОЙ КОД) ----------
   let currentLang = 'html';
   let completedLessons = {};
   let currentStage = 'intro';
   let currentLessonIndex = 0;
   let currentLesson = null;
 
-  // DOM ...
-  // (код такой же, как в прошлом, просто обновлены данные)
-  // Я приведу полный код, чтобы он был рабочим, но в ответе я сокращу, чтобы не повторять весь JavaScript, а только изменения в COURSES и логику.
+  // DOM
+  const menuScreen = document.getElementById('menuScreen');
+  const lessonScreen = document.getElementById('lessonScreen');
+  const lessonTitle = document.getElementById('lessonTitle');
+  const contentArea = document.getElementById('contentArea');
+  const taskArea = document.getElementById('taskArea');
+  const taskQuestion = document.getElementById('taskQuestion');
+  const taskInstruction = document.getElementById('taskInstruction');
+  const userInput = document.getElementById('userInput');
+  const feedbackEl = document.getElementById('feedback');
+  const checkBtn = document.getElementById('checkBtn');
+  const hintBtn = document.getElementById('hintBtn');
+  const revealBtn = document.getElementById('revealBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const startBtn = document.getElementById('startBtn');
+  const backBtn = document.getElementById('backBtn');
+  const progressFill = document.getElementById('progressFill');
 
-  // Но для уверенности дам полный готовый файл в виде ссылки? Нет, я выложу полный код ниже.
+  function loadProgress() {
+    try {
+      const saved = localStorage.getItem('learnProgress');
+      if (saved) completedLessons = JSON.parse(saved);
+    } catch(e) { completedLessons = {}; }
+  }
+  function saveProgress() {
+    localStorage.setItem('learnProgress', JSON.stringify(completedLessons));
+  }
+
+  function showIntro(lang) {
+    currentLang = lang;
+    currentStage = 'intro';
+    const course = COURSES[lang];
+    if (!course) return;
+    lessonTitle.textContent = `Вступление к ${course.name}`;
+    contentArea.innerHTML = `<div class="intro-text">${course.intro.replace(/\n/g, '<br>')}</div>`;
+    taskArea.classList.add('hidden');
+    startBtn.style.display = 'block';
+    nextBtn.style.display = 'none';
+    feedbackEl.textContent = '';
+    const total = course.lessons.length;
+    const done = completedLessons[lang] || 0;
+    progressFill.style.width = (total > 0) ? Math.min(100, (done / total) * 100) + '%' : '0%';
+  }
+
+  function showLesson(lang, index) {
+    currentLang = lang;
+    currentStage = 'lesson';
+    const course = COURSES[lang];
+    if (!course) return;
+    const lessons = course.lessons;
+    if (index >= lessons.length) {
+      lessonTitle.textContent = '🎉 Поздравляю!';
+      contentArea.innerHTML = `<div style="text-align:center;padding:20px;font-size:20px;">Ты прошёл все уроки по ${course.name}!<br>Отличная работа! 💪</div>`;
+      taskArea.classList.add('hidden');
+      startBtn.style.display = 'none';
+      nextBtn.style.display = 'none';
+      progressFill.style.width = '100%';
+      return;
+    }
+    currentLessonIndex = index;
+    currentLesson = lessons[index];
+    lessonTitle.textContent = `Урок ${index+1}: ${currentLesson.title}`;
+    contentArea.innerHTML = `<div class="theory">${currentLesson.theory.replace(/\n/g, '<br>')}</div>`;
+    taskArea.classList.remove('hidden');
+    taskQuestion.textContent = '✏️ ' + currentLesson.task;
+    taskInstruction.innerHTML = currentLesson.instruction.replace(/\n/g, '<br>');
+    userInput.value = '';
+    feedbackEl.textContent = '';
+    feedbackEl.className = 'feedback';
+    nextBtn.style.display = 'block';
+    startBtn.style.display = 'none';
+    const total = course.lessons.length;
+    const done = completedLessons[lang] || 0;
+    progressFill.style.width = (total > 0) ? Math.min(100, (done / total) * 100) + '%' : '0%';
+  }
+
+  function selectLanguage(lang) {
+    currentLang = lang;
+    if (!completedLessons[lang]) completedLessons[lang] = 0;
+    menuScreen.classList.add('hidden');
+    lessonScreen.classList.remove('hidden');
+    if (completedLessons[lang] === 0) {
+      showIntro(lang);
+    } else {
+      const nextIndex = completedLessons[lang];
+      const course = COURSES[lang];
+      if (nextIndex >= course.lessons.length) {
+        showLesson(lang, nextIndex);
+      } else {
+        showLesson(lang, nextIndex);
+      }
+    }
+  }
+
+  function startLearning() {
+    const course = COURSES[currentLang];
+    if (course.lessons.length === 0) return;
+    showLesson(currentLang, 0);
+  }
+
+  function checkAnswer() {
+    if (!currentLesson) return;
+    const userAns = userInput.value.trim();
+    if (!userAns) {
+      feedbackEl.textContent = '✏️ Напиши ответ в поле!';
+      feedbackEl.className = 'feedback wrong';
+      return;
+    }
+    const normalize = s => s.replace(/\s+/g, ' ').trim();
+    if (normalize(userAns) === normalize(currentLesson.answer)) {
+      feedbackEl.textContent = '✅ Правильно! Отлично! 🎉';
+      feedbackEl.className = 'feedback correct';
+      const current = completedLessons[currentLang] || 0;
+      if (current <= currentLessonIndex) {
+        completedLessons[currentLang] = currentLessonIndex + 1;
+        saveProgress();
+        const total = COURSES[currentLang].lessons.length;
+        const done = completedLessons[currentLang];
+        progressFill.style.width = (total > 0) ? Math.min(100, (done / total) * 100) + '%' : '0%';
+      }
+    } else {
+      feedbackEl.textContent = `❌ Неверно. Попробуй ещё раз.`;
+      feedbackEl.className = 'feedback wrong';
+    }
+  }
+
+  function showHint() {
+    if (currentLesson) {
+      feedbackEl.textContent = '💡 ' + currentLesson.hint;
+      feedbackEl.className = 'feedback info';
+    }
+  }
+
+  function toggleReveal() {
+    if (!currentLesson) return;
+    if (feedbackEl.textContent.includes(currentLesson.answer)) {
+      feedbackEl.textContent = '';
+      feedbackEl.className = 'feedback';
+      revealBtn.textContent = '👀 Показать ответ';
+    } else {
+      feedbackEl.textContent = '✅ Правильный ответ: ' + currentLesson.answer;
+      feedbackEl.className = 'feedback correct';
+      revealBtn.textContent = '🙈 Скрыть ответ';
+    }
+  }
+
+  function nextLesson() {
+    if (!currentLesson) return;
+    const course = COURSES[currentLang];
+    const nextIndex = currentLessonIndex + 1;
+    if (nextIndex >= course.lessons.length) {
+      showLesson(currentLang, nextIndex);
+      return;
+    }
+    showLesson(currentLang, nextIndex);
+    feedbackEl.textContent = '';
+    feedbackEl.className = 'feedback';
+  }
+
+  function goToMenu() {
+    lessonScreen.classList.add('hidden');
+    menuScreen.classList.remove('hidden');
+  }
+
+  // Обработчики
+  document.querySelectorAll('.menu-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectLanguage(btn.dataset.lang);
+    });
+  });
+  backBtn.addEventListener('click', goToMenu);
+  checkBtn.addEventListener('click', checkAnswer);
+  hintBtn.addEventListener('click', showHint);
+  revealBtn.addEventListener('click', toggleReveal);
+  nextBtn.addEventListener('click', nextLesson);
+  startBtn.addEventListener('click', startLearning);
+  userInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') checkAnswer();
+  });
+
+  loadProgress();
+  if (window.Telegram && window.Telegram.WebApp) {
+    window.Telegram.WebApp.ready();
+  }
 </script>
 </body>
 </html>

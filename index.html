@@ -1,807 +1,771 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>Обучальник программированию</title>
-  <style>
-    /* ===== СТИЛИ ===== */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: #0b0e14;
-      color: #f0f4fa;
-      padding: 16px;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-    }
-    .container {
-      max-width: 500px;
-      width: 100%;
-    }
-    h1 {
-      text-align: center;
-      font-size: 28px;
-      margin: 8px 0 4px;
-      background: linear-gradient(135deg, #f59e0b, #f97316);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .subtitle {
-      text-align: center;
-      color: #94a3b8;
-      margin-bottom: 20px;
-      font-size: 15px;
-    }
-    .menu-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin: 16px 0;
-    }
-    .menu-btn {
-      background: #1e293b;
-      padding: 20px 10px;
-      border-radius: 20px;
-      border: none;
-      color: white;
-      font-size: 18px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      text-align: center;
-    }
-    .menu-btn:active { transform: scale(0.96); }
-    .menu-btn .icon { font-size: 32px; display: block; margin-bottom: 4px; }
-    .menu-btn .label { font-size: 13px; opacity: 0.7; display: block; }
-    .menu-btn.html { border-bottom: 4px solid #e34c26; }
-    .menu-btn.css { border-bottom: 4px solid #264de4; }
-    .menu-btn.js { border-bottom: 4px solid #f7df1e; color: #f7df1e; }
-    .menu-btn.python { border-bottom: 4px solid #3776ab; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Обучальник программированию</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #0b0e14;
+            color: #f0f4fa;
+            padding: 16px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .container {
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin: 8px 0 4px;
+            background: linear-gradient(135deg, #f59e0b, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .menu-btn {
+            background: #1e293b;
+            padding: 20px 10px;
+            border-radius: 20px;
+            border: none;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .menu-btn:active { transform: scale(0.96); }
+        .menu-btn .icon { font-size: 32px; display: block; margin-bottom: 4px; }
+        .menu-btn .label { font-size: 13px; opacity: 0.7; display: block; }
+        .menu-btn.html { border-bottom: 4px solid #e34c26; }
+        .menu-btn.css { border-bottom: 4px solid #264de4; }
+        .menu-btn.js { border-bottom: 4px solid #f7df1e; color: #f7df1e; }
+        .menu-btn.python { border-bottom: 4px solid #3776ab; }
 
-    .hidden { display: none !important; }
+        .hidden { display: none !important; }
 
-    .back-btn {
-      background: none;
-      border: none;
-      color: #f97316;
-      font-size: 18px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-bottom: 12px;
-      padding: 6px 0;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .progress-bar {
-      background: #1e293b;
-      border-radius: 20px;
-      height: 8px;
-      margin: 12px 0 16px;
-      overflow: hidden;
-    }
-    .progress-fill {
-      background: #f97316;
-      height: 100%;
-      width: 0%;
-      transition: width 0.4s;
-    }
-    .lesson-card {
-      background: #1e293b;
-      border-radius: 24px;
-      padding: 24px 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-    }
-    .lesson-title {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: #fbbf24;
-    }
-    .theory {
-      font-size: 16px;
-      line-height: 1.8;
-      color: #e2e8f0;
-      white-space: pre-wrap;
-      margin-bottom: 16px;
-      background: #0f172a;
-      padding: 16px;
-      border-radius: 16px;
-      border-left: 4px solid #f97316;
-    }
-    .theory code {
-      background: #2d3748;
-      color: #fbbf24;
-      padding: 2px 8px;
-      border-radius: 6px;
-      font-size: 15px;
-    }
-    .step-list {
-      background: #0f172a;
-      padding: 12px 16px;
-      border-radius: 16px;
-      margin: 10px 0 16px;
-      border-left: 4px solid #60a5fa;
-    }
-    .step-list li {
-      margin: 8px 0;
-      list-style: decimal;
-      padding-left: 8px;
-    }
-    .task-box {
-      background: #0f172a;
-      border-radius: 16px;
-      padding: 16px;
-      margin: 12px 0;
-    }
-    .task-box .question {
-      font-size: 18px;
-      font-weight: 500;
-      margin-bottom: 8px;
-    }
-    .task-instruction {
-      font-size: 15px;
-      color: #e2e8f0;
-      background: #1e293b;
-      padding: 12px;
-      border-radius: 12px;
-      margin: 8px 0;
-      line-height: 1.7;
-    }
-    .task-instruction strong {
-      color: #fbbf24;
-    }
-    .input-area {
-      display: flex;
-      gap: 10px;
-      margin: 10px 0;
-    }
-    .input-area input {
-      flex: 1;
-      padding: 14px 18px;
-      border-radius: 40px;
-      border: none;
-      background: #1e293b;
-      color: white;
-      font-size: 16px;
-      outline: 1px solid #334155;
-    }
-    .input-area input:focus { outline: 2px solid #f97316; }
-    .input-area button {
-      padding: 14px 24px;
-      border: none;
-      border-radius: 40px;
-      background: #f97316;
-      color: white;
-      font-weight: 600;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .action-buttons {
-      display: flex;
-      gap: 10px;
-      margin-top: 12px;
-      flex-wrap: wrap;
-    }
-    .action-btn {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 40px;
-      background: #334155;
-      color: white;
-      font-weight: 600;
-      font-size: 15px;
-      cursor: pointer;
-      flex: 1;
-      min-width: 100px;
-    }
-    .action-btn:active { transform: scale(0.96); }
-    .feedback {
-      margin: 12px 0;
-      font-size: 18px;
-      font-weight: 500;
-      text-align: center;
-    }
-    .feedback.correct { color: #4ade80; }
-    .feedback.wrong { color: #f87171; }
-    .feedback.info { color: #60a5fa; }
-    .next-btn {
-      width: 100%;
-      padding: 16px;
-      border: none;
-      border-radius: 40px;
-      background: #f97316;
-      color: white;
-      font-weight: 700;
-      font-size: 18px;
-      cursor: pointer;
-      margin-top: 12px;
-    }
-    .next-btn:active { transform: scale(0.96); }
-    .footer {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #64748b;
-      text-align: center;
-    }
-    .intro-text {
-      font-size: 16px;
-      line-height: 1.8;
-      background: #0f172a;
-      padding: 16px;
-      border-radius: 16px;
-      margin-bottom: 16px;
-      border-left: 4px solid #f59e0b;
-    }
-    .highlight {
-      color: #fbbf24;
-      font-weight: 600;
-    }
-    .code-example {
-      background: #1e293b;
-      padding: 12px;
-      border-radius: 12px;
-      font-family: monospace;
-      color: #fbbf24;
-      margin: 8px 0;
-      white-space: pre-wrap;
-      font-size: 15px;
-    }
-  </style>
+        .back-btn {
+            background: none;
+            border: none;
+            color: #f97316;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 12px;
+            padding: 6px 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .progress-bar {
+            background: #1e293b;
+            border-radius: 20px;
+            height: 8px;
+            margin: 12px 0 16px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: #f97316;
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s;
+        }
+        .lesson-card {
+            background: #1e293b;
+            border-radius: 24px;
+            padding: 24px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+        .lesson-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #fbbf24;
+        }
+        .theory {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #e2e8f0;
+            white-space: pre-wrap;
+            margin-bottom: 16px;
+            background: #0f172a;
+            padding: 16px;
+            border-radius: 16px;
+            border-left: 4px solid #f97316;
+        }
+        .theory code {
+            background: #2d3748;
+            color: #fbbf24;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+        .step-list {
+            background: #0f172a;
+            padding: 12px 16px;
+            border-radius: 16px;
+            margin: 10px 0 16px;
+            border-left: 4px solid #60a5fa;
+        }
+        .step-list li {
+            margin: 8px 0;
+            list-style: decimal;
+            padding-left: 8px;
+        }
+        .task-box {
+            background: #0f172a;
+            border-radius: 16px;
+            padding: 16px;
+            margin: 12px 0;
+        }
+        .task-box .question {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        .task-instruction {
+            font-size: 15px;
+            color: #e2e8f0;
+            background: #1e293b;
+            padding: 12px;
+            border-radius: 12px;
+            margin: 8px 0;
+            line-height: 1.7;
+        }
+        .task-instruction strong {
+            color: #fbbf24;
+        }
+        .input-area {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .input-area input {
+            flex: 1;
+            padding: 14px 18px;
+            border-radius: 40px;
+            border: none;
+            background: #1e293b;
+            color: white;
+            font-size: 16px;
+            outline: 1px solid #334155;
+        }
+        .input-area input:focus { outline: 2px solid #f97316; }
+        .input-area button {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 40px;
+            background: #f97316;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 40px;
+            background: #334155;
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            flex: 1;
+            min-width: 100px;
+        }
+        .action-btn:active { transform: scale(0.96); }
+        .feedback {
+            margin: 12px 0;
+            font-size: 18px;
+            font-weight: 500;
+            text-align: center;
+        }
+        .feedback.correct { color: #4ade80; }
+        .feedback.wrong { color: #f87171; }
+        .feedback.info { color: #60a5fa; }
+        .next-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 40px;
+            background: #f97316;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+        .next-btn:active { transform: scale(0.96); }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #64748b;
+            text-align: center;
+        }
+        .intro-text {
+            font-size: 16px;
+            line-height: 1.8;
+            background: #0f172a;
+            padding: 16px;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            border-left: 4px solid #f59e0b;
+        }
+        .highlight {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+        .code-example {
+            background: #1e293b;
+            padding: 12px;
+            border-radius: 12px;
+            font-family: monospace;
+            color: #fbbf24;
+            margin: 8px 0;
+            white-space: pre-wrap;
+            font-size: 15px;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
 
-  <!-- ГЛАВНОЕ МЕНЮ -->
-  <div id="menuScreen">
-    <h1>🧠 Обучальник</h1>
-    <div class="subtitle">Выбери язык и начни с нуля</div>
-    <div class="menu-grid">
-      <button class="menu-btn html" data-lang="html">
-        <span class="icon">🟧</span> HTML <span class="label">структура веба</span>
-      </button>
-      <button class="menu-btn css" data-lang="css">
-        <span class="icon">🟦</span> CSS <span class="label">стилизация</span>
-      </button>
-      <button class="menu-btn js" data-lang="js">
-        <span class="icon">🟨</span> JavaScript <span class="label">логика</span>
-      </button>
-      <button class="menu-btn python" data-lang="python">
-        <span class="icon">🐍</span> Python <span class="label">скрипты</span>
-      </button>
-    </div>
-    <div style="text-align:center;color:#64748b;font-size:14px;margin-top:20px;">
-      Прогресс сохраняется автоматически
-    </div>
-  </div>
-
-  <!-- ЭКРАН УРОКОВ -->
-  <div id="lessonScreen" class="hidden">
-    <button class="back-btn" id="backBtn">← Назад к выбору</button>
-    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-    <div class="lesson-card">
-      <div class="lesson-title" id="lessonTitle">Вступление</div>
-      <div id="contentArea"></div>
-      <div id="taskArea" class="hidden">
-        <div class="task-box">
-          <div class="question" id="taskQuestion">Задание</div>
-          <div class="task-instruction" id="taskInstruction">Инструкция</div>
-          <div class="input-area">
-            <input type="text" id="userInput" placeholder="Введи код сюда...">
-            <button id="checkBtn">Проверить</button>
-          </div>
-          <div class="feedback" id="feedback"></div>
-          <div class="action-buttons">
-            <button class="action-btn" id="hintBtn">💡 Подсказка</button>
-            <button class="action-btn" id="revealBtn">👀 Показать ответ</button>
-          </div>
-          <button class="next-btn" id="nextBtn">➡️ Следующий урок</button>
+    <!-- МЕНЮ -->
+    <div id="menuScreen">
+        <h1>🧠 Обучальник</h1>
+        <div class="subtitle">Выбери язык и начни с нуля</div>
+        <div class="menu-grid">
+            <button class="menu-btn html" data-lang="html">
+                <span class="icon">🟧</span> HTML <span class="label">структура веба</span>
+            </button>
+            <button class="menu-btn css" data-lang="css">
+                <span class="icon">🟦</span> CSS <span class="label">стилизация</span>
+            </button>
+            <button class="menu-btn js" data-lang="js">
+                <span class="icon">🟨</span> JavaScript <span class="label">логика</span>
+            </button>
+            <button class="menu-btn python" data-lang="python">
+                <span class="icon">🐍</span> Python <span class="label">скрипты</span>
+            </button>
         </div>
-      </div>
-      <button class="next-btn" id="startBtn" style="display:none;">🚀 Начать обучение</button>
+        <div style="text-align:center;color:#64748b;font-size:14px;margin-top:20px;">
+            Прогресс сохраняется автоматически
+        </div>
     </div>
-    <div class="footer">Учись с удовольствием! 😊</div>
-  </div>
+
+    <!-- УРОКИ -->
+    <div id="lessonScreen" class="hidden">
+        <button class="back-btn" id="backBtn">← Назад к выбору</button>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="lesson-card">
+            <div class="lesson-title" id="lessonTitle">Вступление</div>
+            <div id="contentArea"></div>
+            <div id="taskArea" class="hidden">
+                <div class="task-box">
+                    <div class="question" id="taskQuestion">Задание</div>
+                    <div class="task-instruction" id="taskInstruction">Инструкция</div>
+                    <div class="input-area">
+                        <input type="text" id="userInput" placeholder="Введи код сюда...">
+                        <button id="checkBtn">Проверить</button>
+                    </div>
+                    <div class="feedback" id="feedback"></div>
+                    <div class="action-buttons">
+                        <button class="action-btn" id="hintBtn">💡 Подсказка</button>
+                        <button class="action-btn" id="revealBtn">👀 Показать ответ</button>
+                    </div>
+                    <button class="next-btn" id="nextBtn">➡️ Следующий урок</button>
+                </div>
+            </div>
+            <button class="next-btn" id="startBtn" style="display:none;">🚀 Начать обучение</button>
+        </div>
+        <div class="footer">Учись с удовольствием! 😊</div>
+    </div>
 
 </div>
 
 <script>
-  // =====================================================
-  //  БОЛЬШАЯ БАЗА КУРСОВ С ПОДРОБНЫМИ ОБЪЯСНЕНИЯМИ
-  // =====================================================
-  const COURSES = {
-    html: {
-      name: 'HTML',
-      intro: `🌟 **Что такое HTML?**  
-  HTML — это язык, который создаёт каркас веб-страницы. Любой сайт состоит из HTML-кода, который пишется в виде **тегов**.
+    // ============================================================
+    //  БОЛЬШАЯ БАЗА КУРСОВ С ВСТУПЛЕНИЯМИ, ТЕОРИЕЙ И ИНСТРУКЦИЯМИ
+    // ============================================================
+    const COURSES = {
+        html: {
+            name: 'HTML',
+            intro: `🌟 **Что такое HTML?**  
+        HTML — это язык разметки, который создаёт каркас любой веб-страницы.  
+        Представь, что сайт — это дом. HTML — это стены, пол и крыша.
 
-  🧐 **Что такое тег?**  
-  Тег — это команда для браузера. Она заключается в угловые скобки: < и >.  
-  Например, тег <h1> означает "заголовок первого уровня".  
-  Большинство тегов парные: открывающий <h1> и закрывающий </h1> (со слэшем).
+        🧐 **Зачем он нужен?**  
+        Без HTML сайт не существует. Он определяет заголовки, абзацы, картинки, ссылки.
 
-  ⚠️ **С чего начать новичку?**  
-  - Научиться писать теги вручную.  
-  - Не забывать закрывающие теги.  
-  - Понимать, какой тег за что отвечает.
+        ⚠️ **С какими трудностями сталкиваются новички?**  
+        - Забывают закрывающие теги (например, <h1> без </h1>).  
+        - Путают атрибуты (src, href).  
+        - Не понимают вложенность: какой тег внутри какого.
 
-  📘 **Как выполнять задания?**  
-  Я буду давать задание, а ты будешь писать код в поле ввода.  
-  **Важно:** пиши точно так, как в примере, без лишних пробелов.  
-  Если ошибёшься — я покажу правильный ответ и подскажу.
+        📘 **Как выполнять задания?**  
+        В каждом уроке я дам теорию, затем задание. Твоя задача — написать правильный HTML-код в поле ввода.  
+        - **Проверить** — сравнит твой ответ с правильным.  
+        - **Подсказка** — даст намёк.  
+        - **Показать ответ** — покажет верное решение.  
+        После успешного выполнения переходи к следующему уроку.
 
-  🔥 **Давай попробуем! Нажми "Начать обучение"**.`,
-      lessons: [
-        {
-          title: 'Первый тег: заголовок',
-          theory: `📚 **Теория**  
-  Заголовок первого уровня создаётся тегом <h1>.  
-  Пишем открывающий тег: <h1>  
-  Затем текст, который хотим видеть: Привет, мир!  
-  Затем закрывающий тег: </h1>  
-  Вместе получится: <h1>Привет, мир!</h1>.
+        🔥 **Нажми "Начать обучение"**.`,
+            lessons: [
+                {
+                    title: 'Первый тег: заголовок',
+                    theory: `📚 **Теория**  
+        Заголовок первого уровня создаётся тегом <h1>.  
+        Пишем открывающий тег: <h1>  
+        Затем текст: Привет, мир!  
+        Затем закрывающий: </h1>  
+        Вместе: <h1>Привет, мир!</h1>.
 
-  🖐️ **Как набрать на клавиатуре?**  
-  1. Нажми клавишу < (Shift + Б на русской раскладке, или Shift + , на английской).  
-  2. Набери h1.  
-  3. Нажми > (Shift + Ю на русской, или Shift + . на английской).  
-  4. Напиши текст: Привет, мир!  
-  5. Набери </h1> — сначала <, потом /, потом h1, потом >.
-
-  В поле ввода нужно написать **ровно** <h1>Привет, мир!</h1>.`,
-          task: 'Напиши заголовок первого уровня с текстом "Привет, мир!"',
-          answer: '<h1>Привет, мир!</h1>',
-          hint: 'Открывающий тег <h1>, текст, закрывающий </h1>',
-          instruction: `🔹 **Пошаговая инструкция:**  
-  1. Напиши < (Shift + Б на русской или Shift + , на английской).  
-  2. Напиши h1.  
-  3. Напиши > (Shift + Ю или Shift + .).  
-  4. Напиши текст: Привет, мир!  
-  5. Напиши </ (Shift + Б и /).  
-  6. Напиши h1.  
-  7. Напиши >.
-
-  В итоге должно получиться: <h1>Привет, мир!</h1>`
+        🖐️ **Как набрать на клавиатуре?**  
+        1. Нажми < (Shift + Б на русской, или Shift + , на английской).  
+        2. Набери h1.  
+        3. Нажми > (Shift + Ю на русской, или Shift + . на английской).  
+        4. Напиши текст: Привет, мир!  
+        5. Набери </h1> — сначала <, потом /, потом h1, потом >.`,
+                    task: 'Напиши заголовок первого уровня с текстом "Привет, мир!"',
+                    answer: '<h1>Привет, мир!</h1>',
+                    hint: 'Открывающий <h1>, текст, закрывающий </h1>',
+                    instruction: `🔹 **Пошаговая инструкция:**  
+        1. Напиши < (Shift + Б или Shift + ,).  
+        2. Напиши h1.  
+        3. Напиши >.  
+        4. Напиши Привет, мир!.  
+        5. Напиши </ (Shift + Б и /).  
+        6. Напиши h1.  
+        7. Напиши >.`
+                },
+                {
+                    title: 'Абзац текста',
+                    theory: `📚 **Теория**  
+        Абзац создаётся тегом <p> ... </p>.  
+        Пример: <p>Мой первый абзац</p>.`,
+                    task: 'Создай абзац с текстом "Мой первый абзац"',
+                    answer: '<p>Мой первый абзац</p>',
+                    hint: 'Используй тег p',
+                    instruction: `🔹 **Пошагово:**  
+        1. <p>  
+        2. Мой первый абзац  
+        3. </p>`
+                },
+                {
+                    title: 'Ссылка',
+                    theory: `📚 **Теория**  
+        Ссылка — тег <a> с атрибутом href.  
+        Пример: <a href="https://ya.ru">Яндекс</a>.`,
+                    task: 'Сделай ссылку на "https://google.com" с текстом "Поиск"',
+                    answer: '<a href="https://google.com">Поиск</a>',
+                    hint: 'a с href, текст внутри',
+                    instruction: `🔹 **Инструкция:**  
+        1. <a href="https://google.com">  
+        2. Поиск  
+        3. </a>`
+                },
+                {
+                    title: 'Картинка',
+                    theory: `📚 **Теория**  
+        Картинка — одиночный тег <img> с атрибутом src.  
+        Пример: <img src="foto.jpg">.`,
+                    task: 'Вставь картинку с именем "cat.jpg"',
+                    answer: '<img src="cat.jpg">',
+                    hint: 'img с src',
+                    instruction: `🔹 **Инструкция:**  
+        1. <img src="cat.jpg">`
+                },
+                {
+                    title: 'Список',
+                    theory: `📚 **Теория**  
+        Ненумерованный список: <ul> (контейнер) и <li> (пункты).  
+        Пример:  
+        <ul>  
+          <li>Яблоко</li>  
+          <li>Банан</li>  
+        </ul>`,
+                    task: 'Создай список с пунктами "Яблоко" и "Банан"',
+                    answer: '<ul><li>Яблоко</li><li>Банан</li></ul>',
+                    hint: 'ul и li',
+                    instruction: `🔹 **Инструкция:**  
+        1. <ul>  
+        2. <li>Яблоко</li>  
+        3. <li>Банан</li>  
+        4. </ul>`
+                }
+            ]
         },
-        {
-          title: 'Абзац текста',
-          theory: `📚 **Теория**  
-  Абзац создаётся тегом <p> ... </p>.  
-  Этот тег обозначает параграф — блок текста.  
-  Пример: <p>Мой первый абзац</p>.
+        css: {
+            name: 'CSS',
+            intro: `🎨 **Что такое CSS?**  
+        CSS — это язык стилей, который красит страницы.  
+        Правило CSS: селектор { свойство: значение; }  
+        Например, p { color: red; } — все параграфы красные.
 
-  🖐️ **Как написать?**  
-  Открывающий <p>, потом текст, потом закрывающий </p>.`,
-          task: 'Создай абзац с текстом "Мой первый абзац"',
-          answer: '<p>Мой первый абзац</p>',
-          hint: 'Используй тег p',
-          instruction: `🔹 **Пошагово:**  
-  1. Напиши <p>.  
-  2. Напиши Мой первый абзац.  
-  3. Напиши </p>.`
-        },
-        {
-          title: 'Ссылка',
-          theory: `📚 **Теория**  
-  Ссылка делается тегом <a> с атрибутом href.  
-  Атрибут — это дополнительная информация в открывающем теге.  
-  Пишем: <a href="адрес">Текст ссылки</a>.  
-  Пример: <a href="https://ya.ru">Яндекс</a>.
+        🧐 **Зачем он нужен?**  
+        Без CSS сайт выглядит как документ в блокноте. CSS делает его красивым.
 
-  🖐️ **Как набрать?**  
-  <a href="https://google.com">Поиск</a> — запомни кавычки и скобки.`,
-          task: 'Сделай ссылку на "https://google.com" с текстом "Поиск"',
-          answer: '<a href="https://google.com">Поиск</a>',
-          hint: 'a с href, текст внутри',
-          instruction: `🔹 **Инструкция:**  
-  1. Напиши <a href="https://google.com">  
-  2. Напиши Поиск  
-  3. Напиши </a>`
-        },
-        {
-          title: 'Картинка',
-          theory: `📚 **Теория**  
-  Картинки вставляются тегом <img>. Это одиночный тег (без закрывающего).  
-  Атрибут src указывает путь к файлу.  
-  Пример: <img src="foto.jpg">.
+        ⚠️ **Трудности новичков:**  
+        - Неправильно пишут свойства (color vs background-color).  
+        - Не понимают селекторы.  
+        - Путают двоеточие и точку с запятой.
 
-  🖐️ **Как набрать?**  
-  <img src="cat.jpg"> — в поле ввода нужно написать именно это.`,
-          task: 'Вставь картинку с именем "cat.jpg"',
-          answer: '<img src="cat.jpg">',
-          hint: 'используй img и src',
-          instruction: `🔹 **Пошагово:**  
-  1. Напиши <img  
-  2. Пробел  
-  3. Напиши src="cat.jpg"  
-  4. Напиши >`
+        📘 **Как выполнять задания?**  
+        Пиши правила точно с пробелами, скобками и точками с запятой.`,
+            lessons: [
+                {
+                    title: 'Цвет текста',
+                    theory: `📚 **Теория**  
+        Свойство color меняет цвет текста.  
+        Пример: p { color: red; }`,
+                    task: 'Напиши CSS-правило, чтобы параграфы были красными.',
+                    answer: 'p { color: red; }',
+                    hint: 'селектор p, свойство color, значение red',
+                    instruction: `🔹 **Пошагово:**  
+        1. p  
+        2. пробел и {  
+        3. color: red;  
+        4. }`
+                },
+                {
+                    title: 'Фон',
+                    theory: `📚 **Теория**  
+        background-color задаёт фон.  
+        Пример: body { background-color: blue; }`,
+                    task: 'Сделай фон всей страницы синим (blue).',
+                    answer: 'body { background-color: blue; }',
+                    hint: 'body и background-color',
+                    instruction: `🔹 **Инструкция:**  
+        1. body  
+        2. { background-color: blue; }`
+                },
+                {
+                    title: 'Размер шрифта',
+                    theory: `📚 **Теория**  
+        font-size меняет размер текста.  
+        Пример: p { font-size: 20px; }`,
+                    task: 'Установи размер шрифта 20px для всех параграфов.',
+                    answer: 'p { font-size: 20px; }',
+                    hint: 'p и font-size',
+                    instruction: `🔹 **Пошагово:**  
+        p { font-size: 20px; }`
+                }
+            ]
         },
-        {
-          title: 'Список',
-          theory: `📚 **Теория**  
-  Ненумерованный список создаётся тегами <ul> (контейнер) и <li> (пункты).  
-  Пример:  
-  <ul>  
-    <li>Яблоко</li>  
-    <li>Банан</li>  
-  </ul>`,
-          task: 'Создай список с пунктами "Яблоко" и "Банан"',
-          answer: '<ul><li>Яблоко</li><li>Банан</li></ul>',
-          hint: 'ul и li',
-          instruction: `🔹 **Инструкция:**  
-  1. Напиши <ul>  
-  2. Напиши <li>Яблоко</li>  
-  3. Напиши <li>Банан</li>  
-  4. Напиши </ul>`
+        js: {
+            name: 'JavaScript',
+            intro: `⚡ **Что такое JavaScript?**  
+        JavaScript — это язык, который оживляет сайты.  
+        Простейшая команда: console.log('текст') — выводит текст в консоль.
+
+        🧐 **Зачем он нужен?**  
+        Без JS сайт статичен. С ним — интерактивен.
+
+        ⚠️ **Трудности:**  
+        - Регистр букв (console.log, а не Console.Log).  
+        - Кавычки, скобки, точки с запятой.
+
+        📘 **Как выполнять задания?**  
+        Пиши код точно, как в примере.`,
+            lessons: [
+                {
+                    title: 'Вывод в консоль',
+                    theory: `📚 **Теория**  
+        console.log('текст') — выводит текст.`,
+                    task: 'Выведи в консоль фразу "Hello, world!"',
+                    answer: "console.log('Hello, world!');",
+                    hint: 'console.log',
+                    instruction: `🔹 **Инструкция:**  
+        1. console  
+        2. .  
+        3. log  
+        4. (  
+        5. 'Hello, world!'  
+        6. )  
+        7. ;`
+                },
+                {
+                    title: 'Переменная',
+                    theory: `📚 **Теория**  
+        let x = 5; — создаёт переменную x со значением 5.`,
+                    task: 'Объяви переменную "age" со значением 25.',
+                    answer: 'let age = 25;',
+                    hint: 'let age = 25;',
+                    instruction: `🔹 **Пошагово:**  
+        1. let  
+        2. пробел  
+        3. age  
+        4. пробел  
+        5. =  
+        6. пробел  
+        7. 25;`
+                }
+            ]
+        },
+        python: {
+            name: 'Python',
+            intro: `🐍 **Что такое Python?**  
+        Python — это простой и популярный язык.  
+        print('Привет') — выводит текст.
+
+        🧐 **Зачем он нужен?**  
+        Для веба, анализа данных, автоматизации.
+
+        ⚠️ **Особенности:**  
+        - Важны отступы (пробелы).  
+        - Не нужны точки с запятой.
+
+        📘 **Как выполнять задания?**  
+        Пиши команды с круглыми скобками и кавычками.`,
+            lessons: [
+                {
+                    title: 'Первая программа',
+                    theory: `📚 **Теория**  
+        print() — выводит текст.  
+        Пример: print('Hello!')`,
+                    task: 'Напиши код, который выводит "Hello, Python!"',
+                    answer: "print('Hello, Python!')",
+                    hint: 'print()',
+                    instruction: `🔹 **Инструкция:**  
+        1. print  
+        2. (  
+        3. 'Hello, Python!'  
+        4. )`
+                },
+                {
+                    title: 'Переменная',
+                    theory: `📚 **Теория**  
+        name = "Анна" — создаёт переменную.`,
+                    task: 'Создай переменную name со значением "Анна"',
+                    answer: 'name = "Анна"',
+                    hint: 'name = "Анна"',
+                    instruction: `🔹 **Пошагово:**  
+        1. name  
+        2. пробел = пробел  
+        3. "Анна"`
+                }
+            ]
         }
-      ]
-    },
-    css: {
-      name: 'CSS',
-      intro: `🎨 **Что такое CSS?**  
-  CSS — это язык стилей, который красит страницы.  
-  Правило CSS выглядит так: селектор { свойство: значение; }  
-  Селектор — это тег, которому мы задаём стиль.  
-  Например, p { color: red; } — все параграфы станут красными.
+    };
 
-  🧐 **С чего начать?**  
-  Научиться писать простые правила: выбирать тег, ставить фигурные скобки, двоеточие и точку с запятой.
+    // ============================================================
+    //  ЛОГИКА ПРИЛОЖЕНИЯ
+    // ============================================================
+    let currentLang = 'html';
+    let completedLessons = {};
+    let currentStage = 'intro';
+    let currentLessonIndex = 0;
+    let currentLesson = null;
 
-  📘 **Как выполнять задания?**  
-  Пиши правила точно как в примере, с пробелами и знаками.  
-  Внимание: фигурные скобки {} важны!`,
-      lessons: [
-        {
-          title: 'Цвет текста',
-          theory: `📚 **Теория**  
-  Чтобы изменить цвет текста, используй свойство color.  
-  Правило: селектор { color: значение; }  
-  Например: p { color: red; } — все параграфы красные.
+    const menuScreen = document.getElementById('menuScreen');
+    const lessonScreen = document.getElementById('lessonScreen');
+    const lessonTitle = document.getElementById('lessonTitle');
+    const contentArea = document.getElementById('contentArea');
+    const taskArea = document.getElementById('taskArea');
+    const taskQuestion = document.getElementById('taskQuestion');
+    const taskInstruction = document.getElementById('taskInstruction');
+    const userInput = document.getElementById('userInput');
+    const feedbackEl = document.getElementById('feedback');
+    const checkBtn = document.getElementById('checkBtn');
+    const hintBtn = document.getElementById('hintBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const startBtn = document.getElementById('startBtn');
+    const backBtn = document.getElementById('backBtn');
+    const progressFill = document.getElementById('progressFill');
 
-  🖐️ **Как писать?**  
-  Сначала напиши p (селектор), пробел, {, пробел, color: red;, пробел, }.  
-  Важны: двоеточие, точка с запятой, фигурные скобки.`,
-          task: 'Напиши CSS-правило, чтобы параграфы были красными.',
-          answer: 'p { color: red; }',
-          hint: 'селектор p, свойство color, значение red',
-          instruction: `🔹 **Пошагово:**  
-  1. Напиши p  
-  2. Пробел  
-  3. Открывающая фигурная скобка: {  
-  4. Пробел  
-  5. Напиши color: red; (двоеточие и точка с запятой обязательны)  
-  6. Пробел  
-  7. Закрывающая фигурная скобка: }`
-        },
-        {
-          title: 'Фон',
-          theory: `📚 **Теория**  
-  Свойство background-color задаёт цвет фона.  
-  Пример: body { background-color: blue; } — сделает фон страницы синим.
-
-  🖐️ **Как писать?**  
-  body { background-color: blue; }`,
-          task: 'Сделай фон всей страницы синим (blue).',
-          answer: 'body { background-color: blue; }',
-          hint: 'body и background-color',
-          instruction: `🔹 **Инструкция:**  
-  1. Напиши body  
-  2. Пробел и {  
-  3. Напиши background-color: blue;  
-  4. }`
-        },
-        {
-          title: 'Размер шрифта',
-          theory: `📚 **Теория**  
-  Свойство font-size меняет размер текста.  
-  Пример: p { font-size: 20px; }`,
-          task: 'Установи размер шрифта 20px для всех параграфов.',
-          answer: 'p { font-size: 20px; }',
-          hint: 'p и font-size',
-          instruction: `🔹 **Пошагово:**  
-  p { font-size: 20px; }`
-        }
-      ]
-    },
-    js: {
-      name: 'JavaScript',
-      intro: `⚡ **Что такое JavaScript?**  
-  JavaScript — это язык, который заставляет сайты двигаться.  
-  Код пишется как инструкции, которые выполняются одна за другой.  
-  Простейшая команда: console.log('текст') — выводит текст в консоль.
-
-  🧐 **С чего начать?**  
-  С изучения базовых команд, скобок и кавычек.  
-  В JS важны: круглые скобки (), фигурные {}, квадратные [], кавычки '' или "".
-
-  📘 **Как выполнять задания?**  
-  Пиши точный код, учитывая регистр букв (console.log — маленькими буквами).`,
-      lessons: [
-        {
-          title: 'Вывод в консоль',
-          theory: `📚 **Теория**  
-  Команда console.log() выводит сообщение в консоль браузера.  
-  Внутри круглых скобок пишется текст в кавычках.  
-  Пример: console.log('Привет!');
-
-  🖐️ **Как набрать?**  
-  console.log('текст') — обрати внимание на точку, скобки и кавычки.`,
-          task: 'Выведи в консоль фразу "Hello, world!"',
-          answer: "console.log('Hello, world!');",
-          hint: 'console.log',
-          instruction: `🔹 **Инструкция:**  
-  1. Напиши console  
-  2. Напиши .  
-  3. Напиши log  
-  4. Открой круглую скобку: (  
-  5. Напиши 'Hello, world!' (кавычки)  
-  6. Закрой скобку: )  
-  7. Напиши ; (точка с запятой)`
-        },
-        {
-          title: 'Переменная',
-          theory: `📚 **Теория**  
-  Переменная хранит данные. Объявляется через let.  
-  Пример: let x = 5; — создаёт переменную x со значением 5.
-
-  🖐️ **Как писать?**  
-  let x = 5; — обрати внимание на пробелы и точку с запятой.`,
-          task: 'Объяви переменную "age" со значением 25.',
-          answer: 'let age = 25;',
-          hint: 'let age = 25;',
-          instruction: `🔹 **Инструкция:**  
-  1. Напиши let  
-  2. Пробел  
-  3. Напиши age  
-  4. Пробел  
-  5. Напиши =  
-  6. Пробел  
-  7. Напиши 25;`
-        }
-      ]
-    },
-    python: {
-      name: 'Python',
-      intro: `🐍 **Что такое Python?**  
-  Python — это простой и мощный язык.  
-  Команда print() выводит текст на экран.  
-  Например: print('Привет') — покажет Привет.
-
-  🧐 **Особенности:**  
-  В Python не нужны точки с запятой, но важен отступ (пробелы).  
-  Пока мы будем писать простые команды без отступов.
-
-  📘 **Как выполнять задания?**  
-  Пиши команду точно так, как в примере, с круглыми скобками и кавычками.`,
-      lessons: [
-        {
-          title: 'Первая программа',
-          theory: `📚 **Теория**  
-  print() — это функция, которая выводит текст.  
-  Внутри скобок пишем текст в кавычках (можно ' или ").  
-  Пример: print('Hello!')`,
-          task: 'Напиши код, который выводит "Hello, Python!"',
-          answer: "print('Hello, Python!')",
-          hint: 'print()',
-          instruction: `🔹 **Инструкция:**  
-  1. Напиши print  
-  2. Открой скобку: (  
-  3. Напиши 'Hello, Python!'  
-  4. Закрой скобку: )`
-        },
-        {
-          title: 'Переменная',
-          theory: `📚 **Теория**  
-  В Python переменная создаётся просто: имя = значение.  
-  Пример: name = "Анна"`,
-          task: 'Создай переменную name со значением "Анна"',
-          answer: 'name = "Анна"',
-          hint: 'name = "Анна"',
-          instruction: `🔹 **Пошагово:**  
-  1. Напиши name  
-  2. Пробел, =, пробел  
-  3. Напиши "Анна" (в кавычках)`
-        }
-      ]
+    function loadProgress() {
+        try {
+            const saved = localStorage.getItem('learnProgress');
+            if (saved) completedLessons = JSON.parse(saved);
+        } catch(e) { completedLessons = {}; }
     }
-  };
-
-  // ---------- ЛОГИКА ПРИЛОЖЕНИЯ (ОСТАЛЬНОЙ КОД) ----------
-  let currentLang = 'html';
-  let completedLessons = {};
-  let currentStage = 'intro';
-  let currentLessonIndex = 0;
-  let currentLesson = null;
-
-  // DOM
-  const menuScreen = document.getElementById('menuScreen');
-  const lessonScreen = document.getElementById('lessonScreen');
-  const lessonTitle = document.getElementById('lessonTitle');
-  const contentArea = document.getElementById('contentArea');
-  const taskArea = document.getElementById('taskArea');
-  const taskQuestion = document.getElementById('taskQuestion');
-  const taskInstruction = document.getElementById('taskInstruction');
-  const userInput = document.getElementById('userInput');
-  const feedbackEl = document.getElementById('feedback');
-  const checkBtn = document.getElementById('checkBtn');
-  const hintBtn = document.getElementById('hintBtn');
-  const revealBtn = document.getElementById('revealBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const startBtn = document.getElementById('startBtn');
-  const backBtn = document.getElementById('backBtn');
-  const progressFill = document.getElementById('progressFill');
-
-  function loadProgress() {
-    try {
-      const saved = localStorage.getItem('learnProgress');
-      if (saved) completedLessons = JSON.parse(saved);
-    } catch(e) { completedLessons = {}; }
-  }
-  function saveProgress() {
-    localStorage.setItem('learnProgress', JSON.stringify(completedLessons));
-  }
-
-  function showIntro(lang) {
-    currentLang = lang;
-    currentStage = 'intro';
-    const course = COURSES[lang];
-    if (!course) return;
-    lessonTitle.textContent = `Вступление к ${course.name}`;
-    contentArea.innerHTML = `<div class="intro-text">${course.intro.replace(/\n/g, '<br>')}</div>`;
-    taskArea.classList.add('hidden');
-    startBtn.style.display = 'block';
-    nextBtn.style.display = 'none';
-    feedbackEl.textContent = '';
-    const total = course.lessons.length;
-    const done = completedLessons[lang] || 0;
-    progressFill.style.width = (total > 0) ? Math.min(100, (done / total) * 100) + '%' : '0%';
-  }
-
-  function showLesson(lang, index) {
-    currentLang = lang;
-    currentStage = 'lesson';
-    const course = COURSES[lang];
-    if (!course) return;
-    const lessons = course.lessons;
-    if (index >= lessons.length) {
-      lessonTitle.textContent = '🎉 Поздравляю!';
-      contentArea.innerHTML = `<div style="text-align:center;padding:20px;font-size:20px;">Ты прошёл все уроки по ${course.name}!<br>Отличная работа! 💪</div>`;
-      taskArea.classList.add('hidden');
-      startBtn.style.display = 'none';
-      nextBtn.style.display = 'none';
-      progressFill.style.width = '100%';
-      return;
+    function saveProgress() {
+        localStorage.setItem('learnProgress', JSON.stringify(completedLessons));
     }
-    currentLessonIndex = index;
-    currentLesson = lessons[index];
-    lessonTitle.textContent = `Урок ${index+1}: ${currentLesson.title}`;
-    contentArea.innerHTML = `<div class="theory">${currentLesson.theory.replace(/\n/g, '<br>')}</div>`;
-    taskArea.classList.remove('hidden');
-    taskQuestion.textContent = '✏️ ' + currentLesson.task;
-    taskInstruction.innerHTML = currentLesson.instruction.replace(/\n/g, '<br>');
-    userInput.value = '';
-    feedbackEl.textContent = '';
-    feedbackEl.className = 'feedback';
-    nextBtn.style.display = 'block';
-    startBtn.style.display = 'none';
-    const total = course.lessons.length;
-    const done = completedLessons[lang] || 0;
-    progressFill.style.width = (total > 0) ? Math.min(100, (done / total) * 100) + '%' : '0%';
-  }
 
-  function selectLanguage(lang) {
-    currentLang = lang;
-    if (!completedLessons[lang]) completedLessons[lang] = 0;
-    menuScreen.classList.add('hidden');
-    lessonScreen.classList.remove('hidden');
-    if (completedLessons[lang] === 0) {
-      showIntro(lang);
-    } else {
-      const nextIndex = completedLessons[lang];
-      const course = COURSES[lang];
-      if (nextIndex >= course.lessons.length) {
-        showLesson(lang, nextIndex);
-      } else {
-        showLesson(lang, nextIndex);
-      }
-    }
-  }
-
-  function startLearning() {
-    const course = COURSES[currentLang];
-    if (course.lessons.length === 0) return;
-    showLesson(currentLang, 0);
-  }
-
-  function checkAnswer() {
-    if (!currentLesson) return;
-    const userAns = userInput.value.trim();
-    if (!userAns) {
-      feedbackEl.textContent = '✏️ Напиши ответ в поле!';
-      feedbackEl.className = 'feedback wrong';
-      return;
-    }
-    const normalize = s => s.replace(/\s+/g, ' ').trim();
-    if (normalize(userAns) === normalize(currentLesson.answer)) {
-      feedbackEl.textContent = '✅ Правильно! Отлично! 🎉';
-      feedbackEl.className = 'feedback correct';
-      const current = completedLessons[currentLang] || 0;
-      if (current <= currentLessonIndex) {
-        completedLessons[currentLang] = currentLessonIndex + 1;
-        saveProgress();
-        const total = COURSES[currentLang].lessons.length;
-        const done = completedLessons[currentLang];
+    function showIntro(lang) {
+        currentLang = lang;
+        currentStage = 'intro';
+        const course = COURSES[lang];
+        if (!course) return;
+        lessonTitle.textContent = `Вступление к ${course.name}`;
+        contentArea.innerHTML = `<div class="intro-text">${course.intro.replace(/\n/g, '<br>')}</div>`;
+        taskArea.classList.add('hidden');
+        startBtn.style.display = 'block';
+        nextBtn.style.display = 'none';
+        feedbackEl.textContent = '';
+        const total = course.lessons.length;
+        const done = completedLessons[lang] || 0;
         progressFill.style.width = (total > 0) ? Math.min(100, (done / total) * 100) + '%' : '0%';
-      }
-    } else {
-      feedbackEl.textContent = `❌ Неверно. Попробуй ещё раз.`;
-      feedbackEl.className = 'feedback wrong';
     }
-  }
 
-  function showHint() {
-    if (currentLesson) {
-      feedbackEl.textContent = '💡 ' + currentLesson.hint;
-      feedbackEl.className = 'feedback info';
+    function showLesson(lang, index) {
+        currentLang = lang;
+        currentStage = 'lesson';
+        const course = COURSES[lang];
+        if (!course) return;
+        const lessons = course.lessons;
+        if (index >= lessons.length) {
+            lessonTitle.textContent = '🎉 Поздравляю!';
+            contentArea.innerHTML = `<div style="text-align:center;padding:20px;font-size:20px;">Ты прошёл все уроки по ${course.name}!<br>Отличная работа! 💪</div>`;
+            taskArea.classList.add('hidden');
+            startBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+            progressFill.style.width = '100%';
+            return;
+        }
+        currentLessonIndex = index;
+        currentLesson = lessons[index];
+        lessonTitle.textContent = `Урок ${index+1}: ${currentLesson.title}`;
+        contentArea.innerHTML = `<div class="theory">${currentLesson.theory.replace(/\n/g, '<br>')}</div>`;
+        taskArea.classList.remove('hidden');
+        taskQuestion.textContent = '✏️ ' + currentLesson.task;
+        taskInstruction.innerHTML = currentLesson.instruction.replace(/\n/g, '<br>');
+        userInput.value = '';
+        feedbackEl.textContent = '';
+        feedbackEl.className = 'feedback';
+        nextBtn.style.display = 'block';
+        startBtn.style.display = 'none';
+        const total = course.lessons.length;
+        const done = completedLessons[lang] || 0;
+        progressFill.style.width = (total > 0) ? Math.min(100, (done / total) * 100) + '%' : '0%';
     }
-  }
 
-  function toggleReveal() {
-    if (!currentLesson) return;
-    if (feedbackEl.textContent.includes(currentLesson.answer)) {
-      feedbackEl.textContent = '';
-      feedbackEl.className = 'feedback';
-      revealBtn.textContent = '👀 Показать ответ';
-    } else {
-      feedbackEl.textContent = '✅ Правильный ответ: ' + currentLesson.answer;
-      feedbackEl.className = 'feedback correct';
-      revealBtn.textContent = '🙈 Скрыть ответ';
+    function selectLanguage(lang) {
+        currentLang = lang;
+        if (!completedLessons[lang]) completedLessons[lang] = 0;
+        menuScreen.classList.add('hidden');
+        lessonScreen.classList.remove('hidden');
+        if (completedLessons[lang] === 0) {
+            showIntro(lang);
+        } else {
+            const nextIndex = completedLessons[lang];
+            const course = COURSES[lang];
+            if (nextIndex >= course.lessons.length) {
+                showLesson(lang, nextIndex);
+            } else {
+                showLesson(lang, nextIndex);
+            }
+        }
     }
-  }
 
-  function nextLesson() {
-    if (!currentLesson) return;
-    const course = COURSES[currentLang];
-    const nextIndex = currentLessonIndex + 1;
-    if (nextIndex >= course.lessons.length) {
-      showLesson(currentLang, nextIndex);
-      return;
+    function startLearning() {
+        const course = COURSES[currentLang];
+        if (course.lessons.length === 0) return;
+        showLesson(currentLang, 0);
     }
-    showLesson(currentLang, nextIndex);
-    feedbackEl.textContent = '';
-    feedbackEl.className = 'feedback';
-  }
 
-  function goToMenu() {
-    lessonScreen.classList.add('hidden');
-    menuScreen.classList.remove('hidden');
-  }
+    function checkAnswer() {
+        if (!currentLesson) return;
+        const userAns = userInput.value.trim();
+        if (!userAns) {
+            feedbackEl.textContent = '✏️ Напиши ответ в поле!';
+            feedbackEl.className = 'feedback wrong';
+            return;
+        }
+        const normalize = s => s.replace(/\s+/g, ' ').trim();
+        if (normalize(userAns) === normalize(currentLesson.answer)) {
+            feedbackEl.textContent = '✅ Правильно! Отлично! 🎉';
+            feedbackEl.className = 'feedback correct';
+            const current = completedLessons[currentLang] || 0;
+            if (current <= currentLessonIndex) {
+                completedLessons[currentLang] = currentLessonIndex + 1;
+                saveProgress();
+                const total = COURSES[currentLang].lessons.length;
+                const done = completedLessons[currentLang];
+                progressFill.style.width = (total > 0) ? Math.min(100, (done / total) * 100) + '%' : '0%';
+            }
+        } else {
+            feedbackEl.textContent = `❌ Неверно. Попробуй ещё раз.`;
+            feedbackEl.className = 'feedback wrong';
+        }
+    }
 
-  // Обработчики
-  document.querySelectorAll('.menu-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      selectLanguage(btn.dataset.lang);
+    function showHint() {
+        if (currentLesson) {
+            feedbackEl.textContent = '💡 ' + currentLesson.hint;
+            feedbackEl.className = 'feedback info';
+        }
+    }
+
+    function toggleReveal() {
+        if (!currentLesson) return;
+        if (feedbackEl.textContent.includes(currentLesson.answer)) {
+            feedbackEl.textContent = '';
+            feedbackEl.className = 'feedback';
+            revealBtn.textContent = '👀 Показать ответ';
+        } else {
+            feedbackEl.textContent = '✅ Правильный ответ: ' + currentLesson.answer;
+            feedbackEl.className = 'feedback correct';
+            revealBtn.textContent = '🙈 Скрыть ответ';
+        }
+    }
+
+    function nextLesson() {
+        if (!currentLesson) return;
+        const course = COURSES[currentLang];
+        const nextIndex = currentLessonIndex + 1;
+        if (nextIndex >= course.lessons.length) {
+            showLesson(currentLang, nextIndex);
+            return;
+        }
+        showLesson(currentLang, nextIndex);
+        feedbackEl.textContent = '';
+        feedbackEl.className = 'feedback';
+    }
+
+    function goToMenu() {
+        lessonScreen.classList.add('hidden');
+        menuScreen.classList.remove('hidden');
+    }
+
+    // Обработчики
+    document.querySelectorAll('.menu-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            selectLanguage(btn.dataset.lang);
+        });
     });
-  });
-  backBtn.addEventListener('click', goToMenu);
-  checkBtn.addEventListener('click', checkAnswer);
-  hintBtn.addEventListener('click', showHint);
-  revealBtn.addEventListener('click', toggleReveal);
-  nextBtn.addEventListener('click', nextLesson);
-  startBtn.addEventListener('click', startLearning);
-  userInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') checkAnswer();
-  });
+    backBtn.addEventListener('click', goToMenu);
+    checkBtn.addEventListener('click', checkAnswer);
+    hintBtn.addEventListener('click', showHint);
+    revealBtn.addEventListener('click', toggleReveal);
+    nextBtn.addEventListener('click', nextLesson);
+    startBtn.addEventListener('click', startLearning);
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') checkAnswer();
+    });
 
-  loadProgress();
-  if (window.Telegram && window.Telegram.WebApp) {
-    window.Telegram.WebApp.ready();
-  }
+    loadProgress();
+    if (window.Telegram && window.Telegram.WebApp) {
+        window.Telegram.WebApp.ready();
+    }
 </script>
 </body>
 </html>

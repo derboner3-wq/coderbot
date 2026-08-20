@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>HTML-тренажёр</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0b0e14;
+      color: #f0f4fa;
+      padding: 16px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      max-width: 480px;
+      width: 100%;
+    }
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      margin: 0 0 20px;
+      background: linear-gradient(135deg, #f59e0b, #f97316);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .badge {
+      display: inline-block;
+      background: #f97316;
+      color: #0b0e14;
+      padding: 4px 16px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+    .card {
+      background: #1e293b;
+      border-radius: 24px;
+      padding: 28px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      text-align: center;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.2s;
+      user-select: none;
+    }
+    .card:active { transform: scale(0.98); }
+    .question {
+      font-size: 22px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+    .answer-reveal {
+      font-size: 24px;
+      font-weight: 700;
+      color: #fbbf24;
+      word-break: break-all;
+      background: #0f172a;
+      padding: 12px;
+      border-radius: 12px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      text-align: left;
+    }
+    .hint-text {
+      font-size: 16px;
+      color: #94a3b8;
+      margin-top: 8px;
+    }
+    .input-area {
+      display: flex;
+      gap: 10px;
+      margin: 12px 0 8px;
+    }
+    .input-area input {
+      flex: 1;
+      padding: 14px 18px;
+      border-radius: 40px;
+      border: none;
+      background: #0f172a;
+      color: white;
+      font-size: 16px;
+      outline: 1px solid #334155;
+    }
+    .input-area input:focus { outline: 2px solid #f97316; }
+    .input-area button {
+      padding: 14px 24px;
+      border: none;
+      border-radius: 40px;
+      background: #f97316;
+      color: white;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .input-area button:active { transform: scale(0.96); }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .action-btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 40px;
+      background: #334155;
+      color: white;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .action-btn:active { transform: scale(0.96); }
+    .feedback {
+      margin: 12px 0;
+      font-size: 18px;
+      font-weight: 500;
+      text-align: center;
+    }
+    .feedback.correct { color: #4ade80; }
+    .feedback.wrong { color: #f87171; }
+    .footer {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #64748b;
+      text-align: center;
+    }
+    .telegram-close {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      margin-top: 12px;
+      background: #ef4444;
+      border: none;
+      border-radius: 40px;
+      color: white;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>🧩 HTML-тренажёр</h1>
+  <div class="badge">🌐 Программирование</div>
+
+  <div class="card" id="card">
+    <div class="question" id="question">Загружаем...</div>
+    <div id="extra"></div>
+  </div>
+
+  <div class="input-area">
+    <input type="text" id="userInput" placeholder="Введи HTML-код...">
+    <button id="checkBtn">Проверить</button>
+  </div>
+
+  <div class="actions">
+    <button class="action-btn" id="nextBtn">➡️ Следующее</button>
+    <button class="action-btn" id="hintBtn">💡 Подсказка</button>
+    <button class="action-btn" id="revealBtn">👀 Показать ответ</button>
+  </div>
+
+  <div class="feedback" id="feedback"></div>
+  <button class="telegram-close" id="closeBtn">✖ Закрыть тренажёр</button>
+  <div class="footer">Клик по карточке — показать ответ</div>
+</div>
+
+<script>
+  // ---------- БАЗА ЗАДАНИЙ (HTML) ----------
+  const TASKS = [
+    { q: "Создай заголовок h1 с текстом 'Привет'", a: "<h1>Привет</h1>", hint: "Тег h1" },
+    { q: "Создай абзац текста", a: "<p>Текст</p>", hint: "Тег p" },
+    { q: "Вставь картинку cat.jpg", a: "<img src='cat.jpg'>", hint: "Тег img, атрибут src" },
+    { q: "Ссылка на example.com с текстом 'Нажми'", a: "<a href='https://example.com'>Нажми</a>", hint: "Тег a, href" },
+    { q: "Ненумерованный список: Яблоко, Банан", a: "<ul><li>Яблоко</li><li>Банан</li></ul>", hint: "ul и li" },
+    { q: "Жирный текст 'Важно'", a: "<b>Важно</b>", hint: "Тег b или strong" },
+    { q: "Кнопка с текстом 'Отправить'", a: "<button>Отправить</button>", hint: "Тег button" },
+    { q: "Горизонтальная линия", a: "<hr>", hint: "Тег hr" },
+    { q: "Перенос строки", a: "<br>", hint: "Тег br" },
+    { q: "Таблица с одной строкой и двумя ячейками", a: "<table><tr><td>1</td><td>2</td></tr></table>", hint: "table, tr, td" }
+  ];
+
+  // Состояние
+  let currentTask = null;
+  let isFlipped = false;
+
+  // DOM
+  const questionEl = document.getElementById('question');
+  const extraEl = document.getElementById('extra');
+  const feedbackEl = document.getElementById('feedback');
+  const userInput = document.getElementById('userInput');
+  const checkBtn = document.getElementById('checkBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const hintBtn = document.getElementById('hintBtn');
+  const revealBtn = document.getElementById('revealBtn');
+  const card = document.getElementById('card');
+  const closeBtn = document.getElementById('closeBtn');
+
+  // Вспомогательные функции
+  function getRandomTask() {
+    return TASKS[Math.floor(Math.random() * TASKS.length)];
+  }
+
+  function render() {
+    if (!currentTask) {
+      currentTask = getRandomTask();
+      isFlipped = false;
+    }
+    feedbackEl.textContent = '';
+    feedbackEl.className = 'feedback';
+    userInput.value = '';
+
+    questionEl.textContent = currentTask.q;
+    if (isFlipped) {
+      extraEl.innerHTML = `<div class="answer-reveal">${currentTask.a}</div>`;
+    } else {
+      extraEl.innerHTML = `<div class="hint-text">💡 Нажми «Показать ответ» или кликни по карточке</div>`;
+    }
+  }
+
+  function showFeedback(text, isCorrect) {
+    feedbackEl.textContent = text;
+    feedbackEl.className = 'feedback ' + (isCorrect ? 'correct' : 'wrong');
+  }
+
+  function checkAnswer() {
+    if (!currentTask) return;
+    const userAnswer = userInput.value.trim();
+    if (!userAnswer) {
+      showFeedback('✏️ Введи код в поле!', false);
+      return;
+    }
+    // Сравниваем, удаляя лишние пробелы и переносы в начале/конце
+    const normalizedUser = userAnswer.replace(/\s+/g, ' ').trim();
+    const normalizedCorrect = currentTask.a.replace(/\s+/g, ' ').trim();
+    if (normalizedUser === normalizedCorrect) {
+      showFeedback('✅ Правильно! Отлично! 🎉', true);
+    } else {
+      showFeedback(`❌ Неверно. Правильный ответ: ${currentTask.a}`, false);
+    }
+  }
+
+  function nextTask() {
+    currentTask = getRandomTask();
+    isFlipped = false;
+    render();
+  }
+
+  function showHint() {
+    if (currentTask) {
+      showFeedback(`💡 Подсказка: ${currentTask.hint}`, false);
+    }
+  }
+
+  function toggleReveal() {
+    if (!currentTask) return;
+    isFlipped = !isFlipped;
+    render();
+    feedbackEl.textContent = '';
+    feedbackEl.className = 'feedback';
+  }
+
+  // Закрытие приложения (для Telegram Web App)
+  function closeApp() {
+    if (window.Telegram && window.Telegram.WebApp) {
+      window.Telegram.WebApp.close();
+    } else {
+      alert('Закройте вкладку, чтобы выйти из приложения.');
+    }
+  }
+
+  // Обработчики
+  checkBtn.addEventListener('click', checkAnswer);
+  nextBtn.addEventListener('click', nextTask);
+  hintBtn.addEventListener('click', showHint);
+  revealBtn.addEventListener('click', toggleReveal);
+  card.addEventListener('click', toggleReveal);
+  closeBtn.addEventListener('click', closeApp);
+
+  userInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') checkAnswer();
+  });
+
+  // Инициализация
+  render();
+
+  // Сообщаем Telegram, что приложение готово (для Web App)
+  if (window.Telegram && window.Telegram.WebApp) {
+    window.Telegram.WebApp.ready();
+  }
+</script>
+</body>
+</html>

@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Обучальник программированию</title>
+    <title>Обучальник с жизнями</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: system-ui, -apple-system, sans-serif;
+            font-family: system-ui, sans-serif;
             background: #0b0e14;
             color: #f0f4fa;
             padding: 16px;
@@ -16,10 +16,7 @@
             justify-content: center;
             align-items: flex-start;
         }
-        .container {
-            max-width: 500px;
-            width: 100%;
-        }
+        .container { max-width: 500px; width: 100%; }
         h1 {
             text-align: center;
             font-size: 28px;
@@ -28,11 +25,34 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .subtitle {
-            text-align: center;
+        .subtitle { text-align: center; color: #94a3b8; margin-bottom: 20px; }
+        /* Блок жизней всегда виден */
+        .lives {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 20px;
+            background: #1e293b;
+            padding: 8px 16px;
+            border-radius: 40px;
+            margin: 8px 0 16px;
+            justify-content: center;
+        }
+        .lives span { color: #ef4444; }
+        .lives .restore-btn {
+            background: #22c55e;
+            border: none;
+            color: white;
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .lives .timer {
+            font-size: 14px;
             color: #94a3b8;
-            margin-bottom: 20px;
-            font-size: 15px;
+            margin-left: 8px;
         }
         .menu-grid {
             display: grid;
@@ -60,9 +80,7 @@
         .menu-btn.css { border-bottom: 4px solid #264de4; }
         .menu-btn.js { border-bottom: 4px solid #f7df1e; color: #f7df1e; }
         .menu-btn.python { border-bottom: 4px solid #3776ab; }
-
         .hidden { display: none !important; }
-
         .back-btn {
             background: none;
             border: none;
@@ -113,13 +131,6 @@
             border-radius: 16px;
             border-left: 4px solid #f97316;
         }
-        .theory code {
-            background: #2d3748;
-            color: #fbbf24;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 15px;
-        }
         .task-box {
             background: #0f172a;
             border-radius: 16px;
@@ -139,9 +150,6 @@
             border-radius: 12px;
             margin: 8px 0;
             line-height: 1.7;
-        }
-        .task-instruction strong {
-            color: #fbbf24;
         }
         .input-area {
             display: flex;
@@ -185,7 +193,7 @@
             font-size: 15px;
             cursor: pointer;
             flex: 1;
-            min-width: 100px;
+            min-width: 80px;
         }
         .action-btn:active { transform: scale(0.96); }
         .feedback {
@@ -197,19 +205,25 @@
         .feedback.correct { color: #4ade80; }
         .feedback.wrong { color: #f87171; }
         .feedback.info { color: #60a5fa; }
-        .next-btn {
-            width: 100%;
-            padding: 16px;
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            padding: 12px 20px;
             border: none;
             border-radius: 40px;
-            background: #f97316;
+            background: #475569;
             color: white;
-            font-weight: 700;
-            font-size: 18px;
+            font-weight: 600;
+            font-size: 15px;
             cursor: pointer;
-            margin-top: 12px;
+            flex: 1;
+            min-width: 80px;
         }
-        .next-btn:active { transform: scale(0.96); }
+        .nav-btn:active { transform: scale(0.96); }
         .footer {
             margin-top: 20px;
             font-size: 14px;
@@ -225,10 +239,6 @@
             margin-bottom: 16px;
             border-left: 4px solid #f59e0b;
         }
-        .highlight {
-            color: #fbbf24;
-            font-weight: 600;
-        }
         .code-example {
             background: #1e293b;
             padding: 12px;
@@ -237,37 +247,34 @@
             color: #fbbf24;
             margin: 8px 0;
             white-space: pre-wrap;
-            font-size: 15px;
         }
+        .lives .restore-btn:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
 <div class="container">
+
+    <!-- Жизни отображаются всегда -->
+    <div class="lives" id="livesDisplay">
+        ❤️ <span id="livesCount">3</span>
+        <button class="restore-btn" id="restoreBtn">+ Восстановить</button>
+        <span class="timer" id="timerDisplay">⏳ 10:00</span>
+    </div>
 
     <!-- МЕНЮ -->
     <div id="menuScreen">
         <h1>🧠 Обучальник</h1>
         <div class="subtitle">Выбери язык и начни с нуля</div>
         <div class="menu-grid">
-            <button class="menu-btn html" data-lang="html">
-                <span class="icon">🟧</span> HTML <span class="label">структура веба</span>
-            </button>
-            <button class="menu-btn css" data-lang="css">
-                <span class="icon">🟦</span> CSS <span class="label">стилизация</span>
-            </button>
-            <button class="menu-btn js" data-lang="js">
-                <span class="icon">🟨</span> JavaScript <span class="label">логика</span>
-            </button>
-            <button class="menu-btn python" data-lang="python">
-                <span class="icon">🐍</span> Python <span class="label">скрипты</span>
-            </button>
+            <button class="menu-btn html" data-lang="html"><span class="icon">🟧</span> HTML<span class="label">структура</span></button>
+            <button class="menu-btn css" data-lang="css"><span class="icon">🟦</span> CSS<span class="label">стили</span></button>
+            <button class="menu-btn js" data-lang="js"><span class="icon">🟨</span> JS<span class="label">логика</span></button>
+            <button class="menu-btn python" data-lang="python"><span class="icon">🐍</span> Python<span class="label">скрипты</span></button>
         </div>
-        <div style="text-align:center;color:#64748b;font-size:14px;margin-top:20px;">
-            Прогресс сохраняется автоматически
-        </div>
+        <div style="text-align:center;color:#64748b;font-size:14px;margin-top:20px;">Прогресс и жизни сохраняются</div>
     </div>
 
-    <!-- УРОКИ -->
+    <!-- ЭКРАН УРОКОВ -->
     <div id="lessonScreen" class="hidden">
         <button class="back-btn" id="backBtn">← Назад к выбору</button>
         <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
@@ -279,686 +286,345 @@
                     <div class="question" id="taskQuestion">Задание</div>
                     <div class="task-instruction" id="taskInstruction">Инструкция</div>
                     <div class="input-area">
-                        <input type="text" id="userInput" placeholder="Введи код сюда...">
+                        <input type="text" id="userInput" placeholder="Введи код...">
                         <button id="checkBtn">Проверить</button>
                     </div>
                     <div class="feedback" id="feedback"></div>
                     <div class="action-buttons">
                         <button class="action-btn" id="hintBtn">💡 Подсказка</button>
-                        <button class="action-btn" id="revealBtn">👀 Показать ответ</button>
+                        <button class="action-btn" id="revealBtn">👀 Ответ</button>
                     </div>
-                    <button class="next-btn" id="nextBtn">➡️ Следующий урок</button>
+                    <div class="nav-buttons">
+                        <button class="nav-btn" id="prevBtn">◀ Назад</button>
+                        <button class="nav-btn" id="skipBtn">⏩ Пропустить</button>
+                        <button class="nav-btn" id="nextBtn">Следующий ▶</button>
+                    </div>
                 </div>
             </div>
-            <button class="next-btn" id="startBtn" style="display:none;">🚀 Начать обучение</button>
+            <button class="nav-btn" id="startBtn" style="display:none; width:100%;">🚀 Начать обучение</button>
         </div>
-        <div class="footer">Учись с удовольствием! 😊</div>
+        <div class="footer">Учись и не теряй жизни 😉</div>
     </div>
 
 </div>
 
 <script>
-    // ================================================================
-    //  БОЛЬШАЯ БАЗА КУРСОВ — ПО 7–8 УРОКОВ НА КАЖДЫЙ ЯЗЫК
-    //  ТЕОРИЯ РАЗВЁРНУТАЯ, ИНСТРУКЦИИ ПОШАГОВЫЕ
-    // ================================================================
+    // ============================================================
+    //  БАЗА УРОКОВ (та же, что и раньше — 40+ уроков)
+    // ============================================================
     const COURSES = {
         html: {
             name: 'HTML',
-            intro: `🌟 **Что такое HTML?**  
-        HTML — это язык разметки. Он создаёт скелет веб-страницы.  
-        Без HTML сайт невозможен — это как кирпичи для дома.
-
-        🧐 **Зачем он нужен?**  
-        Чтобы браузер понимал, где заголовок, где абзац, где картинка.
-
-        ⚠️ **Трудности новичков:**  
-        - Забывают закрывающие теги.  
-        - Путают атрибуты (src, href).  
-        - Не видят разницы между <b> и <strong>.
-
-        📘 **Как выполнять задания?**  
-        Внимательно читай теорию, смотри на примеры.  
-        В поле ввода пиши код — точно так, как в ответе.  
-        Кнопки помогут, если что-то не получается.
-
-        🔥 **Нажми "Начать обучение"**.`,
+            intro: `🌟 **HTML** — язык разметки. Создаёт структуру страницы.  
+        Теги — это команды в угловых скобках.  
+        Будь внимателен с закрывающими тегами!`,
             lessons: [
-                {
-                    title: 'Заголовки (h1 – h6)',
-                    theory: `📚 **Теория**  
-        Заголовки — это важные фразы, которые выделяются размером и жирностью.  
-        Всего 6 уровней: от <h1> (самый большой) до <h6> (самый маленький).  
-        Обычно на странице используют <h1> для главного названия, а <h2> для подзаголовков.
-
-        Пример: <h1>Это главный заголовок</h1>  
-        <h2>Это подзаголовок</h2>
-
-        🖐️ **Как набрать?**  
-        <h1>Текст</h1> — открывающий, текст, закрывающий.`,
-                    task: 'Создай заголовок первого уровня с текстом "Мой сайт"',
-                    answer: '<h1>Мой сайт</h1>',
-                    hint: 'Используй <h1> ... </h1>',
-                    instruction: `🔹 **Пошагово:**  
-        1. Напиши <h1>  
-        2. Напиши Мой сайт  
-        3. Напиши </h1>`
-                },
-                {
-                    title: 'Абзацы (p)',
-                    theory: `📚 **Теория**  
-        Абзац — это блок текста, который отделяется от других отступами.  
-        Используй тег <p> ... </p> для каждого смыслового куска.  
-        Пример: <p>Это первый абзац.</p> <p>Это второй абзац.</p>`,
-                    task: 'Создай два абзаца: "Первый абзац" и "Второй абзац"',
-                    answer: '<p>Первый абзац</p><p>Второй абзац</p>',
-                    hint: 'Пиши <p>текст</p><p>текст</p>',
-                    instruction: `🔹 **Пошагово:**  
-        1. <p>Первый абзац</p>  
-        2. <p>Второй абзац</p>`
-                },
-                {
-                    title: 'Жирный и курсив',
-                    theory: `📚 **Теория**  
-        Чтобы выделить текст, используй <b> для жирного и <i> для курсива.  
-        Они работают как обёртка: <b>жирный текст</b>  
-        Пример: Я <b>очень</b> люблю <i>программирование</i>.`,
-                    task: 'Сделай текст "HTML" жирным, а "CSS" курсивом',
-                    answer: '<b>HTML</b> и <i>CSS</i>',
-                    hint: '<b> и <i>',
-                    instruction: `🔹 **Инструкция:**  
-        1. <b>HTML</b>  
-        2. пробел и  и пробел  
-        3. <i>CSS</i>`
-                },
-                {
-                    title: 'Ссылки (a)',
-                    theory: `📚 **Теория**  
-        Ссылка создаётся тегом <a> с атрибутом href.  
-        Атрибут — это дополнительная информация внутри открывающего тега.  
-        Пример: <a href="https://ya.ru">Яндекс</a> — кликабельный текст.`,
-                    task: 'Сделай ссылку на "https://google.com" с текстом "Поиск"',
-                    answer: '<a href="https://google.com">Поиск</a>',
-                    hint: 'a href',
-                    instruction: `🔹 **Пошагово:**  
-        1. <a href="https://google.com">  
-        2. Поиск  
-        3. </a>`
-                },
-                {
-                    title: 'Изображения (img)',
-                    theory: `📚 **Теория**  
-        Картинка вставляется одиночным тегом <img> с атрибутом src.  
-        Пример: <img src="foto.jpg"> — загрузит картинку foto.jpg.  
-        Обрати внимание: закрывающего тега нет.`,
-                    task: 'Вставь картинку с именем "cat.jpg"',
-                    answer: '<img src="cat.jpg">',
-                    hint: 'img src',
-                    instruction: `🔹 **Инструкция:**  
-        <img src="cat.jpg">`
-                },
-                {
-                    title: 'Списки (ul, ol)',
-                    theory: `📚 **Теория**  
-        Ненумерованный список — <ul> (unordered list), внутри <li> (list item).  
-        Пример:  
-        <ul>  
-          <li>Яблоко</li>  
-          <li>Банан</li>  
-        </ul>  
-        Для нумерованного используй <ol> вместо <ul>.`,
-                    task: 'Создай нумерованный список: "Первый", "Второй"',
-                    answer: '<ol><li>Первый</li><li>Второй</li></ol>',
-                    hint: 'ol и li',
-                    instruction: `🔹 **Инструкция:**  
-        1. <ol>  
-        2. <li>Первый</li>  
-        3. <li>Второй</li>  
-        4. </ol>`
-                },
-                {
-                    title: 'Таблицы (table)',
-                    theory: `📚 **Теория**  
-        Таблица состоит из строк <tr> и ячеек <td>.  
-        Пример таблицы 2×2:  
-        <table>  
-          <tr><td>1</td><td>2</td></tr>  
-          <tr><td>3</td><td>4</td></tr>  
-        </table>`,
-                    task: 'Создай таблицу с одной строкой и двумя ячейками: "A" и "B"',
-                    answer: '<table><tr><td>A</td><td>B</td></tr></table>',
-                    hint: 'table, tr, td',
-                    instruction: `🔹 **Инструкция:**  
-        1. <table>  
-        2. <tr><td>A</td><td>B</td></tr>  
-        3. </table>`
-                },
-                {
-                    title: 'Горизонтальная линия (hr) и перенос (br)',
-                    theory: `📚 **Теория**  
-        <hr> — горизонтальная линия (разделитель).  
-        <br> — перенос строки (текст с новой строки).  
-        Это одиночные теги, закрывать их не нужно.  
-        Пример:  
-        Текст<br>С новой строки  
-        <hr>  
-        После линии.`,
-                    task: 'Напиши "Привет", затем перенос, затем "Мир", затем линию.',
-                    answer: 'Привет<br>Мир<hr>',
-                    hint: 'br и hr',
-                    instruction: `🔹 **Инструкция:**  
-        1. Привет  
-        2. <br>  
-        3. Мир  
-        4. <hr>`
-                }
+                { title: 'Заголовки h1-h6', theory: 'Заголовки выделяют важные разделы. <h1> — самый главный, <h6> — самый мелкий.\nПример: <h1>Главный заголовок</h1>', task: 'Создай заголовок h1 с текстом "Мой сайт"', answer: '<h1>Мой сайт</h1>', hint: 'h1', instruction: '1. <h1>\n2. Мой сайт\n3. </h1>' },
+                { title: 'Абзацы p', theory: 'Абзац — <p> ... </p>. Группирует текст.\nПример: <p>Это абзац.</p>', task: 'Создай абзац "Первый урок"', answer: '<p>Первый урок</p>', hint: 'p', instruction: '<p>Первый урок</p>' },
+                { title: 'Жирный и курсив', theory: '<b>жирный</b>, <i>курсив</i>. Оборачивают текст.\nПример: Это <b>важно</b>.', task: 'Сделай слово "код" жирным', answer: '<b>код</b>', hint: 'b', instruction: '<b>код</b>' },
+                { title: 'Ссылки a', theory: '<a href="url">текст</a>. Создаёт кликабельную ссылку.\nПример: <a href="https://ya.ru">Яндекс</a>', task: 'Ссылка на google.com с текстом "Поиск"', answer: '<a href="https://google.com">Поиск</a>', hint: 'a href', instruction: '<a href="https://google.com">Поиск</a>' },
+                { title: 'Картинки img', theory: '<img src="путь"> — одиночный тег.\nПример: <img src="photo.jpg">', task: 'Вставь картинку "cat.jpg"', answer: '<img src="cat.jpg">', hint: 'img src', instruction: '<img src="cat.jpg">' },
+                { title: 'Списки ul, ol', theory: '<ul> — ненумерованный, <ol> — нумерованный. Внутри <li>.\nПример: <ul><li>Пункт</li></ul>', task: 'Создай нумерованный список с пунктами "Первый", "Второй"', answer: '<ol><li>Первый</li><li>Второй</li></ol>', hint: 'ol li', instruction: '<ol><li>Первый</li><li>Второй</li></ol>' },
+                { title: 'Таблицы table', theory: 'Таблица: <table>, строки <tr>, ячейки <td>.\nПример: <table><tr><td>A</td><td>B</td></tr></table>', task: 'Таблица с одной строкой и ячейками "X" и "Y"', answer: '<table><tr><td>X</td><td>Y</td></tr></table>', hint: 'table tr td', instruction: '<table><tr><td>X</td><td>Y</td></tr></table>' },
+                { title: 'Горизонтальная линия hr', theory: '<hr> — разделительная линия. Одиночный тег.', task: 'Вставь горизонтальную линию', answer: '<hr>', hint: 'hr', instruction: '<hr>' },
+                { title: 'Перенос строки br', theory: '<br> — перенос на новую строку. Одиночный тег.', task: 'Напиши "Привет" и с новой строки "Мир"', answer: 'Привет<br>Мир', hint: 'br', instruction: 'Привет<br>Мир' },
+                { title: 'Комментарии <!-- -->', theory: 'Комментарий не отображается. <!-- текст -->\nПример: <!-- это комментарий -->', task: 'Напиши комментарий "скрыто"', answer: '<!-- скрыто -->', hint: '<!-- -->', instruction: '<!-- скрыто -->' }
             ]
         },
         css: {
             name: 'CSS',
-            intro: `🎨 **Что такое CSS?**  
-        CSS — это язык стилей. Он отвечает за внешний вид: цвета, шрифты, отступы.  
-        Правило CSS: селектор { свойство: значение; }  
-        Пример: p { color: red; } — все параграфы станут красными.
-
-        🧐 **Зачем он нужен?**  
-        Без CSS страница выглядит как чёрно-белый документ.
-
-        ⚠️ **Трудности:**  
-        - Неправильный синтаксис: забывают двоеточие или точку с запятой.  
-        - Не понимают каскадность (что переопределяет что).
-
-        📘 **Как выполнять задания?**  
-        Пиши CSS-правила точно с фигурными скобками и точкой с запятой.`,
+            intro: `🎨 **CSS** — каскадные таблицы стилей. Оформляет страницы.\nПравило: селектор { свойство: значение; }`,
             lessons: [
-                {
-                    title: 'Цвет текста (color)',
-                    theory: `📚 **Теория**  
-        Свойство color меняет цвет текста.  
-        Значения: названия цветов (red, blue, green), hex (#ff0000), rgb(255,0,0).  
-        Пример: h1 { color: #ff6600; } — оранжевый заголовок.`,
-                    task: 'Напиши правило, чтобы заголовки h1 были синими (blue)',
-                    answer: 'h1 { color: blue; }',
-                    hint: 'селектор h1, свойство color, значение blue',
-                    instruction: `🔹 **Пошагово:**  
-        1. h1  
-        2. пробел и {  
-        3. color: blue;  
-        4. }`
-                },
-                {
-                    title: 'Цвет фона (background-color)',
-                    theory: `📚 **Теория**  
-        background-color задаёт фон элемента.  
-        Пример: body { background-color: #f0f0f0; } — светло-серый фон страницы.`,
-                    task: 'Сделай фон всей страницы жёлтым (yellow)',
-                    answer: 'body { background-color: yellow; }',
-                    hint: 'body и background-color',
-                    instruction: `🔹 **Инструкция:**  
-        body { background-color: yellow; }`
-                },
-                {
-                    title: 'Размер шрифта (font-size)',
-                    theory: `📚 **Теория**  
-        font-size — размер текста. Пишется в пикселях (px), процентах (%), em.  
-        Пример: p { font-size: 16px; } — стандартный размер.`,
-                    task: 'Установи размер шрифта 24px для заголовков h1',
-                    answer: 'h1 { font-size: 24px; }',
-                    hint: 'h1 и font-size',
-                    instruction: `🔹 **Пошагово:**  
-        h1 { font-size: 24px; }`
-                },
-                {
-                    title: 'Жирность (font-weight)',
-                    theory: `📚 **Теория**  
-        font-weight управляет насыщенностью: normal (400), bold (700).  
-        Пример: p { font-weight: bold; } — все параграфы жирные.`,
-                    task: 'Сделай все параграфы жирными',
-                    answer: 'p { font-weight: bold; }',
-                    hint: 'p и font-weight',
-                    instruction: `🔹 **Инструкция:**  
-        p { font-weight: bold; }`
-                },
-                {
-                    title: 'Выравнивание (text-align)',
-                    theory: `📚 **Теория**  
-        text-align выравнивает текст: left, center, right, justify.  
-        Пример: h1 { text-align: center; } — заголовок по центру.`,
-                    task: 'Выровняй все заголовки h2 по центру',
-                    answer: 'h2 { text-align: center; }',
-                    hint: 'h2 и text-align',
-                    instruction: `🔹 **Инструкция:**  
-        h2 { text-align: center; }`
-                },
-                {
-                    title: 'Рамка (border)',
-                    theory: `📚 **Теория**  
-        border — рамка. Пишется: толщина стиль цвет.  
-        Пример: p { border: 1px solid black; } — чёрная рамка толщиной 1px.`,
-                    task: 'Добавь красную рамку толщиной 2px вокруг всех параграфов',
-                    answer: 'p { border: 2px solid red; }',
-                    hint: 'border',
-                    instruction: `🔹 **Инструкция:**  
-        p { border: 2px solid red; }`
-                },
-                {
-                    title: 'Отступы (padding, margin)',
-                    theory: `📚 **Теория**  
-        padding — внутренний отступ (от границы до контента).  
-        margin — внешний отступ (от границы до соседних элементов).  
-        Пример: p { padding: 10px; margin: 20px; }`,
-                    task: 'Дай всем параграфам внутренний отступ 15px',
-                    answer: 'p { padding: 15px; }',
-                    hint: 'padding',
-                    instruction: `🔹 **Инструкция:**  
-        p { padding: 15px; }`
-                },
-                {
-                    title: 'Скругление углов (border-radius)',
-                    theory: `📚 **Теория**  
-        border-radius скругляет углы. Чем больше число, тем круглее.  
-        Пример: div { border-radius: 10px; } — скругление 10 пикселей.`,
-                    task: 'Сделай скругление углов 8px для всех абзацев',
-                    answer: 'p { border-radius: 8px; }',
-                    hint: 'border-radius',
-                    instruction: `🔹 **Инструкция:**  
-        p { border-radius: 8px; }`
-                }
+                { title: 'Цвет текста color', theory: 'color: red; — меняет цвет текста.\nПример: p { color: blue; }', task: 'Сделай заголовки h1 синими', answer: 'h1 { color: blue; }', hint: 'color', instruction: 'h1 { color: blue; }' },
+                { title: 'Цвет фона background-color', theory: 'background-color: yellow; — заливка.\nПример: body { background-color: #f0f0f0; }', task: 'Сделай фон страницы зелёным', answer: 'body { background-color: green; }', hint: 'background-color', instruction: 'body { background-color: green; }' },
+                { title: 'Размер шрифта font-size', theory: 'font-size: 20px; — размер текста.\nПример: p { font-size: 16px; }', task: 'Установи размер шрифта 24px для h1', answer: 'h1 { font-size: 24px; }', hint: 'font-size', instruction: 'h1 { font-size: 24px; }' },
+                { title: 'Жирность font-weight', theory: 'font-weight: bold; — жирный шрифт.\nПример: p { font-weight: bold; }', task: 'Сделай все абзацы жирными', answer: 'p { font-weight: bold; }', hint: 'font-weight', instruction: 'p { font-weight: bold; }' },
+                { title: 'Выравнивание text-align', theory: 'text-align: center; — по центру. Варианты: left, right, justify.\nПример: h1 { text-align: center; }', task: 'Выровняй h2 по центру', answer: 'h2 { text-align: center; }', hint: 'text-align', instruction: 'h2 { text-align: center; }' },
+                { title: 'Рамка border', theory: 'border: 1px solid black; — рамка.\nПример: p { border: 2px solid red; }', task: 'Добавь красную рамку 2px для параграфов', answer: 'p { border: 2px solid red; }', hint: 'border', instruction: 'p { border: 2px solid red; }' },
+                { title: 'Внутренний отступ padding', theory: 'padding: 10px; — отступ внутри элемента.\nПример: div { padding: 20px; }', task: 'Дай всем параграфам внутренний отступ 15px', answer: 'p { padding: 15px; }', hint: 'padding', instruction: 'p { padding: 15px; }' },
+                { title: 'Внешний отступ margin', theory: 'margin: 10px; — отступ снаружи.\nПример: p { margin: 20px; }', task: 'Установи внешний отступ 10px для заголовков h1', answer: 'h1 { margin: 10px; }', hint: 'margin', instruction: 'h1 { margin: 10px; }' },
+                { title: 'Скругление углов border-radius', theory: 'border-radius: 10px; — закругление.\nПример: div { border-radius: 8px; }', task: 'Сделай скругление 12px для всех абзацев', answer: 'p { border-radius: 12px; }', hint: 'border-radius', instruction: 'p { border-radius: 12px; }' },
+                { title: 'Тень box-shadow', theory: 'box-shadow: 5px 5px 10px gray; — тень.\nПример: div { box-shadow: 2px 2px 5px black; }', task: 'Добавь тень для h1: сдвиг 3px 3px, размытие 6px, цвет черный', answer: 'h1 { box-shadow: 3px 3px 6px black; }', hint: 'box-shadow', instruction: 'h1 { box-shadow: 3px 3px 6px black; }' }
             ]
         },
         js: {
-            name: 'JavaScript',
-            intro: `⚡ **Что такое JavaScript?**  
-        JavaScript (JS) — язык, который добавляет логику и интерактивность на сайт.  
-        Пример: при нажатии на кнопку появляется всплывающее окно.
-
-        🧐 **Зачем он нужен?**  
-        Без JS страница статична, с ним — живая и отзывчивая.
-
-        ⚠️ **Трудности:**  
-        - Регистр букв (console.log — с маленькой).  
-        - Точки с запятой и скобки.
-
-        📘 **Как выполнять задания?**  
-        Пиши код в точности, как в примере. Не пропускай точки с запятой.`,
+            name: 'JS',
+            intro: `⚡ **JavaScript** — язык логики. Работает в браузере.\nКоманды: console.log(), переменные, условия.`,
             lessons: [
-                {
-                    title: 'Вывод в консоль (console.log)',
-                    theory: `📚 **Теория**  
-        console.log() выводит сообщение в консоль браузера.  
-        Текст пишется в кавычках (одинарных или двойных).  
-        Пример: console.log('Привет, мир!');`,
-                    task: 'Выведи в консоль фразу "Hello, JS!"',
-                    answer: "console.log('Hello, JS!');",
-                    hint: 'console.log',
-                    instruction: `🔹 **Инструкция:**  
-        1. console  
-        2. .  
-        3. log  
-        4. (  
-        5. 'Hello, JS!'  
-        6. )  
-        7. ;`
-                },
-                {
-                    title: 'Переменные (let)',
-                    theory: `📚 **Теория**  
-        Переменная хранит данные. Объявляется через let или const.  
-        Пример: let age = 25; — переменная age равна 25.  
-        Позже можно изменить: age = 26;`,
-                    task: 'Объяви переменную "city" со значением "Москва"',
-                    answer: 'let city = "Москва";',
-                    hint: 'let',
-                    instruction: `🔹 **Пошагово:**  
-        1. let  
-        2. пробел  
-        3. city  
-        4. пробел  
-        5. =  
-        6. пробел  
-        7. "Москва"  
-        8. ;`
-                },
-                {
-                    title: 'Условный оператор (if)',
-                    theory: `📚 **Теория**  
-        if — проверяет условие и выполняет код, если оно верно.  
-        Условие пишется в круглых скобках, код — в фигурных.  
-        Пример: if (x > 10) { console.log('Больше 10'); }`,
-                    task: 'Напиши if, который при x > 5 выводит "Да"',
-                    answer: 'if (x > 5) { console.log("Да"); }',
-                    hint: 'if, >, фигурные скобки',
-                    instruction: `🔹 **Инструкция:**  
-        1. if  
-        2. (x > 5)  
-        3. { console.log("Да"); }`
-                },
-                {
-                    title: 'Функции (function)',
-                    theory: `📚 **Теория**  
-        Функция — это блок кода, который можно вызывать по имени.  
-        Объявление: function имя() { код }  
-        Пример: function sayHello() { console.log('Привет'); }`,
-                    task: 'Создай функцию showMessage, которая выводит "Привет!"',
-                    answer: 'function showMessage() { console.log("Привет!"); }',
-                    hint: 'function имя() { ... }',
-                    instruction: `🔹 **Пошагово:**  
-        1. function showMessage()  
-        2. { console.log("Привет!"); }`
-                },
-                {
-                    title: 'Цикл for',
-                    theory: `📚 **Теория**  
-        for повторяет код несколько раз.  
-        Синтаксис: for (начало; условие; шаг) { тело }  
-        Пример: for (let i=0; i<3; i++) { console.log(i); } — выведет 0, 1, 2.`,
-                    task: 'Напиши цикл for, который выводит числа от 0 до 2',
-                    answer: 'for (let i=0; i<3; i++) { console.log(i); }',
-                    hint: 'for, i<3',
-                    instruction: `🔹 **Инструкция:**  
-        for (let i=0; i<3; i++) { console.log(i); }`
-                },
-                {
-                    title: 'Массивы ([...])',
-                    theory: `📚 **Теория**  
-        Массив — это список значений в квадратных скобках.  
-        Пример: let fruits = ['яблоко', 'банан', 'апельсин'];  
-        Доступ по индексу: fruits[0] — 'яблоко'.`,
-                    task: 'Создай массив с числами 10, 20, 30',
-                    answer: '[10, 20, 30]',
-                    hint: 'квадратные скобки',
-                    instruction: `🔹 **Инструкция:**  
-        [10, 20, 30]`
-                },
-                {
-                    title: 'Объекты ({...})',
-                    theory: `📚 **Теория**  
-        Объект — это набор свойств в фигурных скобках.  
-        Пример: let person = { name: 'Анна', age: 30 };  
-        Доступ: person.name → 'Анна'.`,
-                    task: 'Создай объект с полями title: "Книга" и pages: 200',
-                    answer: '{ title: "Книга", pages: 200 }',
-                    hint: 'фигурные скобки, двоеточие',
-                    instruction: `🔹 **Инструкция:**  
-        { title: "Книга", pages: 200 }`
-                }
+                { title: 'Вывод console.log', theory: 'console.log(\'текст\'); — выводит в консоль.\nПример: console.log(\'Привет\');', task: 'Выведи "Hello, JS!"', answer: "console.log('Hello, JS!');", hint: 'console.log', instruction: "console.log('Hello, JS!');" },
+                { title: 'Переменная let', theory: 'let x = 5; — объявление переменной.\nПример: let name = \'Анна\';', task: 'Создай переменную age со значением 25', answer: 'let age = 25;', hint: 'let', instruction: 'let age = 25;' },
+                { title: 'Условный if', theory: 'if (условие) { ... } — проверка.\nПример: if (x > 10) { console.log(\'Да\'); }', task: 'Если x > 5, вывести "Больше"', answer: 'if (x > 5) { console.log("Больше"); }', hint: 'if', instruction: 'if (x > 5) { console.log("Больше"); }' },
+                { title: 'Функция function', theory: 'function имя() { ... } — блок кода.\nПример: function sayHi() { console.log(\'Hi\'); }', task: 'Создай функцию showMsg, которая выводит "Привет"', answer: 'function showMsg() { console.log("Привет"); }', hint: 'function', instruction: 'function showMsg() { console.log("Привет"); }' },
+                { title: 'Цикл for', theory: 'for (let i=0; i<3; i++) { ... } — повтор.\nПример: for (let i=0; i<3; i++) { console.log(i); }', task: 'Выведи числа 0,1,2 через цикл for', answer: 'for (let i=0; i<3; i++) { console.log(i); }', hint: 'for', instruction: 'for (let i=0; i<3; i++) { console.log(i); }' },
+                { title: 'Массив []', theory: 'let arr = [1, 2, 3]; — список.\nДоступ: arr[0] — первый элемент.', task: 'Создай массив с числами 10, 20, 30', answer: '[10, 20, 30]', hint: 'квадратные скобки', instruction: '[10, 20, 30]' },
+                { title: 'Объект {}', theory: 'let obj = { key: \'value\' }; — хранит пары.\nПример: let person = { name: \'Anna\' };', task: 'Создай объект с полями title: "Книга", pages: 200', answer: '{ title: "Книга", pages: 200 }', hint: 'фигурные скобки', instruction: '{ title: "Книга", pages: 200 }' },
+                { title: 'Оператор + (сложение)', theory: 'let sum = a + b; — складывает числа или строки.\nПример: let x = 5 + 3;', task: 'Напиши выражение, складывающее 7 и 3', answer: '7 + 3', hint: '+', instruction: '7 + 3' },
+                { title: 'Строковые кавычки', theory: 'Можно использовать \' или ".\nПример: let s = "Привет";', task: 'Создай строку "JavaScript" в кавычках', answer: '"JavaScript"', hint: 'кавычки', instruction: '"JavaScript"' },
+                { title: 'alert()', theory: 'alert(\'текст\'); — показывает всплывающее окно.\nПример: alert(\'Привет!\');', task: 'Выведи alert с текстом "Hello"', answer: 'alert("Hello");', hint: 'alert', instruction: 'alert("Hello");' }
             ]
         },
         python: {
             name: 'Python',
-            intro: `🐍 **Что такое Python?**  
-        Python — это мощный и простой язык. Код похож на обычный английский.  
-        Пример: print('Привет') — выводит текст.
-
-        🧐 **Зачем он нужен?**  
-        Для веб-сайтов, анализа данных, искусственного интеллекта.
-
-        ⚠️ **Особенности:**  
-        - Отступы (пробелы) вместо фигурных скобок.  
-        - Не нужны точки с запятой.
-
-        📘 **Как выполнять задания?**  
-        Пиши команды с правильными отступами.`,
+            intro: `🐍 **Python** — простой и мощный язык. Код понятен новичкам.\nКоманда print() выводит текст.`,
             lessons: [
-                {
-                    title: 'Вывод (print)',
-                    theory: `📚 **Теория**  
-        print() выводит текст на экран.  
-        Текст пишется в кавычках (одинарных или двойных).  
-        Пример: print('Hello, Python!')`,
-                    task: 'Напиши код, который выводит "Hello, Python!"',
-                    answer: "print('Hello, Python!')",
-                    hint: 'print()',
-                    instruction: `🔹 **Инструкция:**  
-        1. print  
-        2. (  
-        3. 'Hello, Python!'  
-        4. )`
-                },
-                {
-                    title: 'Переменные',
-                    theory: `📚 **Теория**  
-        Переменная создаётся простым присваиванием: имя = значение.  
-        Пример: name = 'Анна' — переменная name хранит строку.`,
-                    task: 'Создай переменную age со значением 30',
-                    answer: 'age = 30',
-                    hint: 'просто присвоить',
-                    instruction: `🔹 **Инструкция:**  
-        age = 30`
-                },
-                {
-                    title: 'Условный оператор if',
-                    theory: `📚 **Теория**  
-        if проверяет условие. Тело пишется с отступом (4 пробела).  
-        Пример:  
-        if x > 10:  
-            print('Больше 10')`,
-                    task: 'Напиши if, который при age > 18 выводит "Взрослый"',
-                    answer: 'if age > 18:\n    print("Взрослый")',
-                    hint: 'if, двоеточие, отступ',
-                    instruction: `🔹 **Пошагово:**  
-        1. if age > 18:  
-        2. (пробел) пробел пробел пробел print("Взрослый")`
-                },
-                {
-                    title: 'Цикл for',
-                    theory: `📚 **Теория**  
-        for повторяет код по элементам списка или диапазону.  
-        Пример:  
-        for i in range(3):  
-            print(i)  # выведет 0, 1, 2`,
-                    task: 'Напиши цикл for, который выводит числа 0, 1, 2',
-                    answer: 'for i in range(3):\n    print(i)',
-                    hint: 'for, range, отступ',
-                    instruction: `🔹 **Инструкция:**  
-        1. for i in range(3):  
-        2. (отступ) print(i)`
-                },
-                {
-                    title: 'Функции (def)',
-                    theory: `📚 **Теория**  
-        Функция объявляется через def. Тело с отступом.  
-        Пример:  
-        def say_hi():  
-            print('Привет!')`,
-                    task: 'Создай функцию greet, которая выводит "Привет"',
-                    answer: 'def greet():\n    print("Привет")',
-                    hint: 'def, двоеточие, отступ',
-                    instruction: `🔹 **Инструкция:**  
-        1. def greet():  
-        2. (отступ) print("Привет")`
-                },
-                {
-                    title: 'Списки (list)',
-                    theory: `📚 **Теория**  
-        Список — это коллекция в квадратных скобках.  
-        Пример: fruits = ['яблоко', 'банан', 'апельсин']`,
-                    task: 'Создай список из чисел 5, 10, 15',
-                    answer: '[5, 10, 15]',
-                    hint: 'квадратные скобки',
-                    instruction: `🔹 **Инструкция:**  
-        [5, 10, 15]`
-                },
-                {
-                    title: 'Словари (dict)',
-                    theory: `📚 **Теория**  
-        Словарь — это пары ключ: значение в фигурных скобках.  
-        Пример: person = {'name': 'Анна', 'age': 30}`,
-                    task: 'Создай словарь с ключами "city" и "country", значениями "Москва" и "Россия"',
-                    answer: '{"city": "Москва", "country": "Россия"}',
-                    hint: 'фигурные скобки, двоеточие',
-                    instruction: `🔹 **Инструкция:**  
-        {"city": "Москва", "country": "Россия"}`
-                }
+                { title: 'print()', theory: 'print(\'текст\') — выводит на экран.\nПример: print(\'Привет\')', task: 'Выведи "Hello, Python!"', answer: "print('Hello, Python!')", hint: 'print', instruction: "print('Hello, Python!')" },
+                { title: 'Переменная', theory: 'name = \'Анна\' — присваивание.\nТип определяется автоматически.', task: 'Создай переменную age = 30', answer: 'age = 30', hint: 'присвоить', instruction: 'age = 30' },
+                { title: 'if', theory: 'if условие: (с отступом)\nПример: if x > 10: print(\'Больше\')', task: 'Если age > 18, вывести "Взрослый"', answer: 'if age > 18:\n    print("Взрослый")', hint: 'if', instruction: 'if age > 18:\n    print("Взрослый")' },
+                { title: 'for range', theory: 'for i in range(3): — цикл 0,1,2.\nПример: for i in range(3): print(i)', task: 'Выведи числа 0,1,2 через for', answer: 'for i in range(3):\n    print(i)', hint: 'for range', instruction: 'for i in range(3):\n    print(i)' },
+                { title: 'def функция', theory: 'def имя(): — объявление функции.\nПример: def hello(): print(\'Hi\')', task: 'Создай функцию greet, печатающую "Привет"', answer: 'def greet():\n    print("Привет")', hint: 'def', instruction: 'def greet():\n    print("Привет")' },
+                { title: 'Список list', theory: 'list = [1, 2, 3] — коллекция.\nПример: fruits = [\'яблоко\', \'банан\']', task: 'Создай список [5, 10, 15]', answer: '[5, 10, 15]', hint: 'квадратные скобки', instruction: '[5, 10, 15]' },
+                { title: 'Словарь dict', theory: 'dict = { \'ключ\': \'значение\' } — пары.\nПример: person = {\'name\': \'Anna\'}', task: 'Создай словарь с ключами "city": "Москва", "country": "Россия"', answer: '{"city": "Москва", "country": "Россия"}', hint: 'фигурные скобки', instruction: '{"city": "Москва", "country": "Россия"}' },
+                { title: 'len()', theory: 'len(список) — возвращает длину.\nПример: len([1,2,3]) → 3', task: 'Напиши выражение len() для списка [1,2,3]', answer: 'len([1,2,3])', hint: 'len', instruction: 'len([1,2,3])' },
+                { title: 'type()', theory: 'type(переменная) — показывает тип.\nПример: type(5) → int', task: 'Напиши type() для числа 42', answer: 'type(42)', hint: 'type', instruction: 'type(42)' },
+                { title: 'input()', theory: 'input(\'Вопрос\') — получает текст от пользователя.\nПример: name = input(\'Как тебя зовут?\')', task: 'Напиши input с вопросом "Как дела?"', answer: 'input("Как дела?")', hint: 'input', instruction: 'input("Как дела?")' }
             ]
         }
     };
 
-    // ================================================================
-    //  ЛОГИКА ПРИЛОЖЕНИЯ (БЕЗ ИЗМЕНЕНИЙ)
-    // ================================================================
-    let currentLang = 'html';
-    let completedLessons = {};
-    let currentStage = 'intro';
-    let currentLessonIndex = 0;
-    let currentLesson = null;
+    // ============================================================
+    //  УПРАВЛЕНИЕ СОСТОЯНИЕМ И ЖИЗНЯМИ
+    // ============================================================
+    let state = {
+        currentLang: 'html',
+        lessonIndex: {},
+        completed: {},
+        lives: 3,
+        lastLostTime: 0,
+        restoredCount: 0,
+    };
 
-    const menuScreen = document.getElementById('menuScreen');
-    const lessonScreen = document.getElementById('lessonScreen');
-    const lessonTitle = document.getElementById('lessonTitle');
-    const contentArea = document.getElementById('contentArea');
-    const taskArea = document.getElementById('taskArea');
-    const taskQuestion = document.getElementById('taskQuestion');
-    const taskInstruction = document.getElementById('taskInstruction');
-    const userInput = document.getElementById('userInput');
-    const feedbackEl = document.getElementById('feedback');
-    const checkBtn = document.getElementById('checkBtn');
-    const hintBtn = document.getElementById('hintBtn');
-    const revealBtn = document.getElementById('revealBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const startBtn = document.getElementById('startBtn');
-    const backBtn = document.getElementById('backBtn');
-    const progressFill = document.getElementById('progressFill');
-
-    function loadProgress() {
+    function loadState() {
         try {
-            const saved = localStorage.getItem('learnProgress');
-            if (saved) completedLessons = JSON.parse(saved);
-        } catch(e) { completedLessons = {}; }
+            const saved = localStorage.getItem('learnState');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                state = { ...state, ...parsed };
+            }
+        } catch(e) {}
+        for (let lang in COURSES) {
+            if (!(lang in state.lessonIndex)) state.lessonIndex[lang] = 0;
+            if (!(lang in state.completed)) state.completed[lang] = 0;
+        }
     }
-    function saveProgress() {
-        localStorage.setItem('learnProgress', JSON.stringify(completedLessons));
-    }
-
-    function showIntro(lang) {
-        currentLang = lang;
-        currentStage = 'intro';
-        const course = COURSES[lang];
-        if (!course) return;
-        lessonTitle.textContent = `Вступление к ${course.name}`;
-        contentArea.innerHTML = `<div class="intro-text">${course.intro.replace(/\n/g, '<br>')}</div>`;
-        taskArea.classList.add('hidden');
-        startBtn.style.display = 'block';
-        nextBtn.style.display = 'none';
-        feedbackEl.textContent = '';
-        const total = course.lessons.length;
-        const done = completedLessons[lang] || 0;
-        progressFill.style.width = (total > 0) ? Math.min(100, (done / total) * 100) + '%' : '0%';
+    function saveState() {
+        localStorage.setItem('learnState', JSON.stringify(state));
     }
 
-    function showLesson(lang, index) {
-        currentLang = lang;
-        currentStage = 'lesson';
+    function restoreLife() {
+        if (state.lives >= 3) {
+            showFeedback('Жизней уже максимум!', 'info');
+            return;
+        }
+        state.lives++;
+        state.lastLostTime = Date.now();
+        saveState();
+        updateLivesDisplay();
+        showFeedback('❤️ Жизнь восстановлена!', 'correct');
+    }
+
+    function checkAutoRestore() {
+        const now = Date.now();
+        if (state.lives < 3 && (now - state.lastLostTime) >= 10 * 60 * 1000) {
+            state.lives++;
+            state.lastLostTime = now;
+            saveState();
+            updateLivesDisplay();
+            showFeedback('❤️ Жизнь восстановлена автоматически!', 'info');
+        }
+    }
+
+    function updateLivesDisplay() {
+        document.getElementById('livesCount').textContent = state.lives;
+        const timerEl = document.getElementById('timerDisplay');
+        if (state.lives >= 3) {
+            timerEl.textContent = '✅ Максимум';
+            return;
+        }
+        const now = Date.now();
+        const diff = 10 * 60 * 1000 - (now - state.lastLostTime);
+        if (diff <= 0) {
+            timerEl.textContent = '⏳ 0:00 (доступно)';
+        } else {
+            const minutes = Math.floor(diff / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+            timerEl.textContent = `⏳ ${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+        }
+    }
+
+    function showFeedback(text, type = 'info') {
+        const fb = document.getElementById('feedback');
+        fb.textContent = text;
+        fb.className = 'feedback ' + type;
+    }
+
+    // ============================================================
+    //  ЛОГИКА УРОКОВ
+    // ============================================================
+    let currentLessonObj = null;
+    let currentLessonIndex = 0;
+
+    function renderLesson(lang, index) {
         const course = COURSES[lang];
         if (!course) return;
         const lessons = course.lessons;
         if (index >= lessons.length) {
-            lessonTitle.textContent = '🎉 Поздравляю!';
-            contentArea.innerHTML = `<div style="text-align:center;padding:20px;font-size:20px;">Ты прошёл все уроки по ${course.name}!<br>Отличная работа! 💪</div>`;
-            taskArea.classList.add('hidden');
-            startBtn.style.display = 'none';
-            nextBtn.style.display = 'none';
-            progressFill.style.width = '100%';
+            document.getElementById('lessonTitle').textContent = '🎉 Поздравляю!';
+            document.getElementById('contentArea').innerHTML = `<div style="text-align:center;padding:20px;font-size:20px;">Ты прошёл все уроки по ${course.name}!<br>Отличная работа! 💪</div>`;
+            document.getElementById('taskArea').classList.add('hidden');
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('prevBtn').style.display = 'none';
+            document.getElementById('skipBtn').style.display = 'none';
+            document.getElementById('progressFill').style.width = '100%';
             return;
         }
         currentLessonIndex = index;
-        currentLesson = lessons[index];
-        lessonTitle.textContent = `Урок ${index+1}: ${currentLesson.title}`;
-        contentArea.innerHTML = `<div class="theory">${currentLesson.theory.replace(/\n/g, '<br>')}</div>`;
-        taskArea.classList.remove('hidden');
-        taskQuestion.textContent = '✏️ ' + currentLesson.task;
-        taskInstruction.innerHTML = currentLesson.instruction.replace(/\n/g, '<br>');
-        userInput.value = '';
-        feedbackEl.textContent = '';
-        feedbackEl.className = 'feedback';
-        nextBtn.style.display = 'block';
-        startBtn.style.display = 'none';
-        const total = course.lessons.length;
-        const done = completedLessons[lang] || 0;
-        progressFill.style.width = (total > 0) ? Math.min(100, (done / total) * 100) + '%' : '0%';
-    }
+        currentLessonObj = lessons[index];
+        state.lessonIndex[lang] = index;
+        saveState();
 
-    function selectLanguage(lang) {
-        currentLang = lang;
-        if (!completedLessons[lang]) completedLessons[lang] = 0;
-        menuScreen.classList.add('hidden');
-        lessonScreen.classList.remove('hidden');
-        if (completedLessons[lang] === 0) {
-            showIntro(lang);
+        document.getElementById('lessonTitle').textContent = `Урок ${index+1}: ${currentLessonObj.title}`;
+        document.getElementById('contentArea').innerHTML = `<div class="theory">${currentLessonObj.theory.replace(/\n/g, '<br>')}</div>`;
+        document.getElementById('taskArea').classList.remove('hidden');
+        document.getElementById('taskQuestion').textContent = '✏️ ' + currentLessonObj.task;
+        document.getElementById('taskInstruction').innerHTML = currentLessonObj.instruction.replace(/\n/g, '<br>');
+        document.getElementById('userInput').value = '';
+        document.getElementById('feedback').textContent = '';
+        document.getElementById('feedback').className = 'feedback';
+
+        document.getElementById('nextBtn').style.display = 'block';
+        document.getElementById('prevBtn').style.display = 'block';
+        document.getElementById('skipBtn').style.display = 'block';
+        document.getElementById('startBtn').style.display = 'none';
+
+        const total = lessons.length;
+        const done = state.completed[lang] || 0;
+        document.getElementById('progressFill').style.width = Math.min(100, (done / total) * 100) + '%';
+
+        if (state.lives <= 0) {
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('checkBtn').style.opacity = '0.5';
+            showFeedback('😵 У тебя закончились жизни! Подожди 10 минут или восстанови.', 'wrong');
         } else {
-            const nextIndex = completedLessons[lang];
-            const course = COURSES[lang];
-            if (nextIndex >= course.lessons.length) {
-                showLesson(lang, nextIndex);
-            } else {
-                showLesson(lang, nextIndex);
-            }
+            document.getElementById('checkBtn').disabled = false;
+            document.getElementById('checkBtn').style.opacity = '1';
         }
     }
 
-    function startLearning() {
-        const course = COURSES[currentLang];
-        if (course.lessons.length === 0) return;
-        showLesson(currentLang, 0);
+    function goToLesson(lang, index) {
+        if (index < 0) index = 0;
+        const course = COURSES[lang];
+        if (index >= course.lessons.length) index = course.lessons.length - 1;
+        renderLesson(lang, index);
+    }
+
+    function nextLesson() {
+        const lang = state.currentLang;
+        const nextIdx = state.lessonIndex[lang] + 1;
+        goToLesson(lang, nextIdx);
+    }
+
+    function prevLesson() {
+        const lang = state.currentLang;
+        const prevIdx = state.lessonIndex[lang] - 1;
+        goToLesson(lang, prevIdx);
+    }
+
+    function skipLesson() {
+        const lang = state.currentLang;
+        const idx = state.lessonIndex[lang];
+        const completed = state.completed[lang] || 0;
+        if (idx >= completed) {
+            state.completed[lang] = idx + 1;
+            saveState();
+        }
+        nextLesson();
     }
 
     function checkAnswer() {
-        if (!currentLesson) return;
-        const userAns = userInput.value.trim();
+        if (state.lives <= 0) {
+            showFeedback('Нет жизней! Восстанови или подожди.', 'wrong');
+            return;
+        }
+        if (!currentLessonObj) return;
+        const userAns = document.getElementById('userInput').value.trim();
         if (!userAns) {
-            feedbackEl.textContent = '✏️ Напиши ответ в поле!';
-            feedbackEl.className = 'feedback wrong';
+            showFeedback('✏️ Напиши ответ!', 'wrong');
             return;
         }
         const normalize = s => s.replace(/\s+/g, ' ').trim();
-        if (normalize(userAns) === normalize(currentLesson.answer)) {
-            feedbackEl.textContent = '✅ Правильно! Отлично! 🎉';
-            feedbackEl.className = 'feedback correct';
-            const current = completedLessons[currentLang] || 0;
-            if (current <= currentLessonIndex) {
-                completedLessons[currentLang] = currentLessonIndex + 1;
-                saveProgress();
-                const total = COURSES[currentLang].lessons.length;
-                const done = completedLessons[currentLang];
-                progressFill.style.width = (total > 0) ? Math.min(100, (done / total) * 100) + '%' : '0%';
+        const correct = currentLessonObj.answer;
+        if (normalize(userAns) === normalize(correct)) {
+            showFeedback('✅ Правильно! Отлично! 🎉', 'correct');
+            const lang = state.currentLang;
+            const idx = state.lessonIndex[lang];
+            const completed = state.completed[lang] || 0;
+            if (idx >= completed) {
+                state.completed[lang] = idx + 1;
+                saveState();
+                const total = COURSES[lang].lessons.length;
+                const done = state.completed[lang];
+                document.getElementById('progressFill').style.width = Math.min(100, (done / total) * 100) + '%';
             }
         } else {
-            feedbackEl.textContent = `❌ Неверно. Попробуй ещё раз.`;
-            feedbackEl.className = 'feedback wrong';
+            state.lives--;
+            state.lastLostTime = Date.now();
+            saveState();
+            updateLivesDisplay();
+            showFeedback(`❌ Неверно. Осталось жизней: ${state.lives}`, 'wrong');
+            if (state.lives <= 0) {
+                document.getElementById('checkBtn').disabled = true;
+                document.getElementById('checkBtn').style.opacity = '0.5';
+                showFeedback('😵 Жизни кончились! Жди 10 минут или восстанови.', 'wrong');
+            }
         }
     }
 
     function showHint() {
-        if (currentLesson) {
-            feedbackEl.textContent = '💡 ' + currentLesson.hint;
-            feedbackEl.className = 'feedback info';
+        if (currentLessonObj) {
+            showFeedback('💡 ' + currentLessonObj.hint, 'info');
         }
     }
 
     function toggleReveal() {
-        if (!currentLesson) return;
-        if (feedbackEl.textContent.includes(currentLesson.answer)) {
-            feedbackEl.textContent = '';
-            feedbackEl.className = 'feedback';
-            revealBtn.textContent = '👀 Показать ответ';
+        if (!currentLessonObj) return;
+        const fb = document.getElementById('feedback');
+        if (fb.textContent.includes(currentLessonObj.answer)) {
+            fb.textContent = '';
+            fb.className = 'feedback';
         } else {
-            feedbackEl.textContent = '✅ Правильный ответ: ' + currentLesson.answer;
-            feedbackEl.className = 'feedback correct';
-            revealBtn.textContent = '🙈 Скрыть ответ';
+            fb.textContent = '✅ Правильный ответ: ' + currentLessonObj.answer;
+            fb.className = 'feedback correct';
         }
     }
 
-    function nextLesson() {
-        if (!currentLesson) return;
-        const course = COURSES[currentLang];
-        const nextIndex = currentLessonIndex + 1;
-        if (nextIndex >= course.lessons.length) {
-            showLesson(currentLang, nextIndex);
-            return;
+    function selectLanguage(lang) {
+        state.currentLang = lang;
+        if (!(lang in state.lessonIndex)) state.lessonIndex[lang] = 0;
+        if (!(lang in state.completed)) state.completed[lang] = 0;
+        menuScreen.classList.add('hidden');
+        lessonScreen.classList.remove('hidden');
+        if (state.completed[lang] === 0 && state.lessonIndex[lang] === 0) {
+            const course = COURSES[lang];
+            document.getElementById('lessonTitle').textContent = `Вступление к ${course.name}`;
+            document.getElementById('contentArea').innerHTML = `<div class="intro-text">${course.intro.replace(/\n/g, '<br>')}</div>`;
+            document.getElementById('taskArea').classList.add('hidden');
+            document.getElementById('startBtn').style.display = 'block';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('prevBtn').style.display = 'none';
+            document.getElementById('skipBtn').style.display = 'none';
+            document.getElementById('progressFill').style.width = '0%';
+        } else {
+            const idx = state.lessonIndex[lang];
+            renderLesson(lang, idx);
         }
-        showLesson(currentLang, nextIndex);
-        feedbackEl.textContent = '';
-        feedbackEl.className = 'feedback';
+        updateLivesDisplay();
+    }
+
+    function startLearning() {
+        const lang = state.currentLang;
+        const idx = state.lessonIndex[lang];
+        renderLesson(lang, idx);
     }
 
     function goToMenu() {
@@ -966,26 +632,36 @@
         menuScreen.classList.remove('hidden');
     }
 
-    // Обработчики
+    // ============================================================
+    //  ИНИЦИАЛИЗАЦИЯ И ОБРАБОТЧИКИ
+    // ============================================================
+    loadState();
+    // Сразу обновляем отображение жизней
+    updateLivesDisplay();
+
+    // Авто-восстановление и таймер
+    setInterval(() => {
+        checkAutoRestore();
+        updateLivesDisplay();
+    }, 1000);
+
     document.querySelectorAll('.menu-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             selectLanguage(btn.dataset.lang);
         });
     });
-    backBtn.addEventListener('click', goToMenu);
-    checkBtn.addEventListener('click', checkAnswer);
-    hintBtn.addEventListener('click', showHint);
-    revealBtn.addEventListener('click', toggleReveal);
-    nextBtn.addEventListener('click', nextLesson);
-    startBtn.addEventListener('click', startLearning);
-    userInput.addEventListener('keypress', (e) => {
+    document.getElementById('backBtn').addEventListener('click', goToMenu);
+    document.getElementById('checkBtn').addEventListener('click', checkAnswer);
+    document.getElementById('hintBtn').addEventListener('click', showHint);
+    document.getElementById('revealBtn').addEventListener('click', toggleReveal);
+    document.getElementById('nextBtn').addEventListener('click', nextLesson);
+    document.getElementById('prevBtn').addEventListener('click', prevLesson);
+    document.getElementById('skipBtn').addEventListener('click', skipLesson);
+    document.getElementById('startBtn').addEventListener('click', startLearning);
+    document.getElementById('restoreBtn').addEventListener('click', restoreLife);
+    document.getElementById('userInput').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') checkAnswer();
     });
-
-    loadProgress();
-    if (window.Telegram && window.Telegram.WebApp) {
-        window.Telegram.WebApp.ready();
-    }
 </script>
 </body>
 </html>

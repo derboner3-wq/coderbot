@@ -3,28 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Programming Learning App</title>
+    <title>Code Learner</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         body {
             font-family: system-ui, -apple-system, sans-serif;
             background: #0b0e14;
             color: #f0f4fa;
             padding: 16px;
-            max-width: 500px;
+            max-width: 480px;
             margin: 0 auto;
+            font-size: 16px;
+            line-height: 1.5;
         }
+        /* lives bar */
         .lives {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             background: #1e293b;
             padding: 8px 16px;
             border-radius: 40px;
             margin-bottom: 16px;
             font-size: 20px;
+            flex-wrap: wrap;
         }
-        .lives span { color: #ef4444; }
+        .lives .heart {
+            color: #ef4444;
+        }
         .restore-btn {
             background: #22c55e;
             border: none;
@@ -33,13 +43,19 @@
             border-radius: 40px;
             font-weight: 600;
             cursor: pointer;
+            font-size: 16px;
         }
-        .timer { font-size: 14px; color: #94a3b8; margin-left: auto; }
+        .timer {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-left: auto;
+        }
+        /* menu */
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            margin: 16px 0;
+            margin: 20px 0;
         }
         .menu-btn {
             background: #1e293b;
@@ -51,10 +67,16 @@
             font-weight: 600;
             cursor: pointer;
             border-bottom: 4px solid #f97316;
+            transition: 0.1s;
             text-align: center;
         }
-        .menu-btn:active { transform: scale(0.96); }
-        .hidden { display: none !important; }
+        .menu-btn:active {
+            transform: scale(0.96);
+        }
+        .hidden {
+            display: none !important;
+        }
+        /* lesson screen */
         .back-btn {
             background: none;
             border: none;
@@ -76,7 +98,7 @@
             background: #f97316;
             height: 100%;
             width: 0%;
-            transition: width 0.4s;
+            transition: width 0.3s;
         }
         .lesson-card {
             background: #1e293b;
@@ -95,9 +117,23 @@
             border-radius: 16px;
             border-left: 4px solid #f97316;
             white-space: pre-wrap;
-            line-height: 1.8;
             font-size: 16px;
             margin-bottom: 16px;
+        }
+        .code-example {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 12px;
+            margin: 12px 0;
+            border: 1px solid #334155;
+        }
+        .code-example pre {
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            color: #fbbf24;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin: 0;
         }
         .task-box {
             background: #0f172a;
@@ -105,7 +141,7 @@
             border-radius: 16px;
             margin-top: 12px;
         }
-        .task-box .question {
+        .task-question {
             font-weight: 500;
             margin-bottom: 8px;
             font-size: 18px;
@@ -122,7 +158,7 @@
         .input-area {
             display: flex;
             gap: 10px;
-            margin: 10px 0;
+            margin: 12px 0;
         }
         .input-area input {
             flex: 1;
@@ -134,7 +170,9 @@
             font-size: 16px;
             outline: 1px solid #334155;
         }
-        .input-area input:focus { outline: 2px solid #f97316; }
+        .input-area input:focus {
+            outline: 2px solid #f97316;
+        }
         .input-area button {
             padding: 14px 24px;
             border: none;
@@ -145,39 +183,31 @@
             font-size: 16px;
             cursor: pointer;
         }
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-        .action-btn {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 40px;
-            background: #334155;
-            color: #fff;
-            font-weight: 600;
-            cursor: pointer;
-            flex: 1;
-            min-width: 80px;
-        }
+        .action-buttons,
         .nav-buttons {
             display: flex;
             gap: 10px;
             margin-top: 12px;
             flex-wrap: wrap;
         }
+        .action-btn,
         .nav-btn {
-            padding: 12px 20px;
+            padding: 12px 16px;
             border: none;
             border-radius: 40px;
-            background: #475569;
             color: #fff;
             font-weight: 600;
             cursor: pointer;
             flex: 1;
-            min-width: 80px;
+            min-width: 70px;
+            font-size: 15px;
+            text-align: center;
+        }
+        .action-btn {
+            background: #334155;
+        }
+        .nav-btn {
+            background: #475569;
         }
         .feedback {
             margin: 12px 0;
@@ -185,9 +215,15 @@
             font-weight: 500;
             text-align: center;
         }
-        .correct { color: #4ade80; }
-        .wrong { color: #f87171; }
-        .info { color: #60a5fa; }
+        .correct {
+            color: #4ade80;
+        }
+        .wrong {
+            color: #f87171;
+        }
+        .info {
+            color: #60a5fa;
+        }
         .intro-text {
             background: #0f172a;
             padding: 16px;
@@ -203,34 +239,26 @@
             color: #64748b;
             text-align: center;
         }
-        .code-example {
-            background: #1e293b;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-family: monospace;
-            color: #fbbf24;
-            margin: 6px 0;
-        }
     </style>
 </head>
 <body>
 
     <div class="lives" id="livesDisplay">
-        ❤️ <span id="livesCount">3</span>
+        <span class="heart">❤️</span> <span id="livesCount">3</span>
         <button class="restore-btn" id="restoreBtn">+ Restore</button>
         <span class="timer" id="timerDisplay">⏳ 10:00</span>
     </div>
 
     <div id="menuScreen">
         <h1 style="text-align:center;">🧠 Code Learner</h1>
-        <div style="text-align:center;color:#94a3b8;margin-bottom:20px;">Choose a language</div>
+        <p style="text-align:center;color:#94a3b8;margin-bottom:20px;">Choose a language</p>
         <div class="menu-grid">
             <button class="menu-btn" data-lang="html">🟧 HTML</button>
             <button class="menu-btn" data-lang="css">🟦 CSS</button>
             <button class="menu-btn" data-lang="js">🟨 JavaScript</button>
             <button class="menu-btn" data-lang="python">🐍 Python</button>
         </div>
-        <div style="text-align:center;color:#64748b;font-size:14px;margin-top:20px;">Progress and lives are saved</div>
+        <p style="text-align:center;color:#64748b;font-size:14px;margin-top:20px;">Progress &amp; lives are saved</p>
     </div>
 
     <div id="lessonScreen">
@@ -241,10 +269,10 @@
             <div id="contentArea"></div>
             <div id="taskArea" class="hidden">
                 <div class="task-box">
-                    <div class="question" id="taskQuestion">Task</div>
+                    <div class="task-question" id="taskQuestion">Task</div>
                     <div class="task-instruction" id="taskInstruction">Instruction</div>
                     <div class="input-area">
-                        <input type="text" id="userInput" placeholder="Enter your code...">
+                        <input type="text" id="userInput" placeholder="Type your code...">
                         <button id="checkBtn">Check</button>
                     </div>
                     <div class="feedback" id="feedback"></div>
@@ -265,57 +293,526 @@
     </div>
 
     <script>
-        // ================================================================
-        //  COURSE DATA — 12 LESSONS PER LANGUAGE WITH DETAILED THEORY
-        // ================================================================
+        // ============================================================
+        //  COURSE DATA – 6 lessons per language with theory, task, answer, hint, instruction, and code example
+        // ============================================================
         const COURSES = {
             html: {
                 name: 'HTML',
                 intro: `🌟 **WHAT IS HTML?**  
-        HTML (HyperText Markup Language) creates the skeleton of every web page.  
-        It uses tags in angle brackets. Most tags are paired: opening and closing.  
-        Be careful — a missing closing tag breaks the page.`,
-                lessons: [
-                    { title: 'Tag <h1> — heading level 1', 
-                      theory: `📚 **THEORY:**  
-        Headings highlight important sections. <h1> is the most important heading on the page (only one per page).  
-        It looks like: <h1>text</h1>.  
-        The opening tag <h1> tells the browser "heading starts here",  
-        the closing tag </h1> says "heading ends here".  
-        Inside you put the heading text.
-
-        🖐️ **HOW TO TYPE ON KEYBOARD:**  
-        1. Press < (Shift + , on English keyboard).  
-        2. Type h1.  
-        3. Press > (Shift + .).  
-        4. Type your text (e.g., My Website).  
-        5. Type </ (Shift + < and /).  
-        6. Type h1.  
-        7. Press >.
-
-        ✅ **Correct example:** <h1>My Website</h1>`, 
-                      task: 'Create an h1 heading with text "My Website"', 
-                      answer: '<h1>My Website</h1>', 
-                      hint: 'Open h1, write text, close h1', 
-                      instruction: '1. <h1>\n2. My Website\n3. </h1>' 
-                    },
-                    // ... (остальные уроки HTML на английском)
-                    // Для краткости я продолжу все уроки, но здесь нужно полное перечисление.
-                    // Поскольку ответ ограничен, я перечислю все уроки, но сокращу вывод, чтобы уместить.
-                    // В реальном коде я должен дать все 12 уроков для каждого языка.
-                    // Я дам полный код в ответе, но здесь для экономии места приведу полный скрипт.
-                ]
+        HTML creates the structure of web pages.  
+        It uses tags in angle brackets. Most tags come in pairs: opening <tag> and closing </tag>.  
+        Pay attention to closing tags!`,
+                lessons: [{
+                    title: 'Heading <h1>',
+                    theory: `Headings are used for titles. <h1> is the main heading (only one per page).  
+        Syntax: <h1>text</h1>  
+        The opening tag <h1> and closing </h1> wrap the text.`,
+                    example: '<h1>My Website</h1>',
+                    task: 'Create an <h1> heading with the text "My Website"',
+                    answer: '<h1>My Website</h1>',
+                    hint: 'Use <h1> and </h1>',
+                    instruction: '1. Type <h1>\n2. Type My Website\n3. Type </h1>'
+                }, {
+                    title: 'Paragraph <p>',
+                    theory: `Paragraphs group text. Use <p> ... </p> for each paragraph.  
+        Browsers automatically add spacing between paragraphs.`,
+                    example: '<p>This is a paragraph.</p>',
+                    task: 'Create a paragraph with the text "First lesson"',
+                    answer: '<p>First lesson</p>',
+                    hint: 'Use <p> and </p>',
+                    instruction: '<p>First lesson</p>'
+                }, {
+                    title: 'Bold and Italic',
+                    theory: `Use <b> for bold and <i> for italic.  
+        They wrap text: <b>bold</b> and <i>italic</i>.  
+        Can be combined: <b><i>bold italic</i></b>`,
+                    example: 'This is <b>important</b>.',
+                    task: 'Make the word "code" bold',
+                    answer: '<b>code</b>',
+                    hint: 'Use <b> tag',
+                    instruction: '<b>code</b>'
+                }, {
+                    title: 'Link <a>',
+                    theory: `Links are created with <a href="URL">text</a>.  
+        The href attribute specifies the destination.  
+        Example: <a href="https://google.com">Google</a>`,
+                    example: '<a href="https://google.com">Search</a>',
+                    task: 'Create a link to google.com with text "Search"',
+                    answer: '<a href="https://google.com">Search</a>',
+                    hint: 'Use <a href="...">',
+                    instruction: '<a href="https://google.com">Search</a>'
+                }, {
+                    title: 'Image <img>',
+                    theory: `Images use the self-closing tag <img>.  
+        The src attribute points to the image file.  
+        Example: <img src="photo.jpg">`,
+                    example: '<img src="cat.jpg">',
+                    task: 'Insert an image with filename "cat.jpg"',
+                    answer: '<img src="cat.jpg">',
+                    hint: 'Use <img src="...">',
+                    instruction: '<img src="cat.jpg">'
+                }, {
+                    title: 'List <ul> and <ol>',
+                    theory: `Unordered lists use <ul> with <li> items.  
+        Ordered lists use <ol>.  
+        Example: <ul><li>Apple</li><li>Banana</li></ul>`,
+                    example: '<ol><li>First</li><li>Second</li></ol>',
+                    task: 'Create an ordered list with items "First" and "Second"',
+                    answer: '<ol><li>First</li><li>Second</li></ol>',
+                    hint: 'Use <ol> and <li>',
+                    instruction: '<ol><li>First</li><li>Second</li></ol>'
+                }]
             },
-            // Аналогично для CSS, JS, Python с полными переводами.
-            // Я вставлю полный массив COURSES на английском в финальном коде.
+            css: {
+                name: 'CSS',
+                intro: `🎨 **WHAT IS CSS?**  
+        CSS styles web pages: colors, fonts, layout.  
+        A CSS rule: selector { property: value; }  
+        Example: p { color: red; } makes all paragraphs red.`,
+                lessons: [{
+                    title: 'Color',
+                    theory: `The color property changes text color.  
+        Values can be color names (red, blue), hex codes (#ff0000), or rgb.  
+        Rule: p { color: blue; }`,
+                    example: 'h1 { color: blue; }',
+                    task: 'Make h1 headings blue',
+                    answer: 'h1 { color: blue; }',
+                    hint: 'Use color property',
+                    instruction: 'h1 { color: blue; }'
+                }, {
+                    title: 'Background-color',
+                    theory: `background-color fills the background of an element.  
+        Example: body { background-color: green; }`,
+                    example: 'body { background-color: green; }',
+                    task: 'Make the page background green',
+                    answer: 'body { background-color: green; }',
+                    hint: 'Use background-color',
+                    instruction: 'body { background-color: green; }'
+                }, {
+                    title: 'Font-size',
+                    theory: `font-size sets the text size. Common units: px, %, em.  
+        Example: p { font-size: 20px; }`,
+                    example: 'h1 { font-size: 24px; }',
+                    task: 'Set font size 24px for h1',
+                    answer: 'h1 { font-size: 24px; }',
+                    hint: 'Use font-size',
+                    instruction: 'h1 { font-size: 24px; }'
+                }, {
+                    title: 'Font-weight',
+                    theory: `font-weight controls boldness: normal (400) or bold (700).  
+        Example: p { font-weight: bold; }`,
+                    example: 'p { font-weight: bold; }',
+                    task: 'Make all paragraphs bold',
+                    answer: 'p { font-weight: bold; }',
+                    hint: 'Use font-weight',
+                    instruction: 'p { font-weight: bold; }'
+                }, {
+                    title: 'Text-align',
+                    theory: `text-align aligns text: left, center, right, justify.  
+        Example: h1 { text-align: center; }`,
+                    example: 'h2 { text-align: center; }',
+                    task: 'Center-align h2 headings',
+                    answer: 'h2 { text-align: center; }',
+                    hint: 'Use text-align',
+                    instruction: 'h2 { text-align: center; }'
+                }, {
+                    title: 'Border',
+                    theory: `border adds a border: thickness style color.  
+        Example: p { border: 2px solid red; }`,
+                    example: 'p { border: 2px solid red; }',
+                    task: 'Add a red 2px solid border to paragraphs',
+                    answer: 'p { border: 2px solid red; }',
+                    hint: 'Use border',
+                    instruction: 'p { border: 2px solid red; }'
+                }]
+            },
+            js: {
+                name: 'JavaScript',
+                intro: `⚡ **WHAT IS JAVASCRIPT?**  
+        JavaScript makes web pages interactive.  
+        It runs in the browser and can handle events, manipulate content, and more.`,
+                lessons: [{
+                    title: 'console.log()',
+                    theory: `console.log() outputs a message to the browser console.  
+        Inside parentheses put text in quotes (single or double).  
+        Example: console.log('Hello!');`,
+                    example: "console.log('Hello, World!');",
+                    task: 'Print "Hello, JS!" to the console',
+                    answer: "console.log('Hello, JS!');",
+                    hint: 'Use console.log()',
+                    instruction: "console.log('Hello, JS!');"
+                }, {
+                    title: 'Variables (let)',
+                    theory: `Variables store data. Use let to declare.  
+        Example: let age = 25;`,
+                    example: 'let age = 25;',
+                    task: 'Declare a variable age with value 25',
+                    answer: 'let age = 25;',
+                    hint: 'Use let',
+                    instruction: 'let age = 25;'
+                }, {
+                    title: 'if statement',
+                    theory: `if checks a condition and runs code if true.  
+        Syntax: if (condition) { code }  
+        Example: if (x > 5) { console.log('Big'); }`,
+                    example: 'if (x > 5) { console.log("Big"); }',
+                    task: 'Write an if that prints "Big" when x > 5',
+                    answer: 'if (x > 5) { console.log("Big"); }',
+                    hint: 'Use if and console.log',
+                    instruction: 'if (x > 5) { console.log("Big"); }'
+                }, {
+                    title: 'function declaration',
+                    theory: `Functions are reusable blocks of code.  
+        Syntax: function name() { code }  
+        Example: function hello() { console.log('Hi'); }`,
+                    example: 'function showMsg() { console.log("Hello"); }',
+                    task: 'Create a function showMsg that prints "Hello"',
+                    answer: 'function showMsg() { console.log("Hello"); }',
+                    hint: 'Use function',
+                    instruction: 'function showMsg() { console.log("Hello"); }'
+                }, {
+                    title: 'for loop',
+                    theory: `for repeats code a number of times.  
+        Syntax: for (start; condition; step) { body }  
+        Example: for (let i=0; i<3; i++) { console.log(i); }`,
+                    example: 'for (let i=0; i<3; i++) { console.log(i); }',
+                    task: 'Write a loop that prints 0,1,2',
+                    answer: 'for (let i=0; i<3; i++) { console.log(i); }',
+                    hint: 'Use for',
+                    instruction: 'for (let i=0; i<3; i++) { console.log(i); }'
+                }, {
+                    title: 'Array []',
+                    theory: `Arrays hold lists of values in square brackets.  
+        Example: let nums = [10, 20, 30];  
+        Access with index: nums[0] → 10`,
+                    example: '[10, 20, 30]',
+                    task: 'Create an array with numbers 10, 20, 30',
+                    answer: '[10, 20, 30]',
+                    hint: 'Use square brackets',
+                    instruction: '[10, 20, 30]'
+                }]
+            },
+            python: {
+                name: 'Python',
+                intro: `🐍 **WHAT IS PYTHON?**  
+        Python is a simple, powerful language used for web, data, automation.  
+        Indentation (spaces) is important instead of curly braces.`,
+                lessons: [{
+                    title: 'print()',
+                    theory: `print() outputs text to the screen.  
+        Put text in quotes (single or double).  
+        Example: print('Hello')`,
+                    example: "print('Hello, Python!')",
+                    task: 'Print "Hello, Python!"',
+                    answer: "print('Hello, Python!')",
+                    hint: 'Use print()',
+                    instruction: "print('Hello, Python!')"
+                }, {
+                    title: 'Variables',
+                    theory: `Assign values with =. No type declaration needed.  
+        Example: name = 'Anna'`,
+                    example: 'age = 30',
+                    task: 'Create a variable age with value 30',
+                    answer: 'age = 30',
+                    hint: 'Just assign',
+                    instruction: 'age = 30'
+                }, {
+                    title: 'if statement',
+                    theory: `if checks a condition. The body must be indented (4 spaces).  
+        Example: if x > 10: print('Big')`,
+                    example: 'if age > 18:\n    print("Adult")',
+                    task: 'Write an if that prints "Adult" when age > 18',
+                    answer: 'if age > 18:\n    print("Adult")',
+                    hint: 'Use if and indentation',
+                    instruction: 'if age > 18:\n    print("Adult")'
+                }, {
+                    title: 'for loop',
+                    theory: `for iterates over a sequence. range(3) gives 0,1,2.  
+        Example: for i in range(3): print(i)`,
+                    example: 'for i in range(3):\n    print(i)',
+                    task: 'Print numbers 0,1,2 using for',
+                    answer: 'for i in range(3):\n    print(i)',
+                    hint: 'Use for and range',
+                    instruction: 'for i in range(3):\n    print(i)'
+                }, {
+                    title: 'Function def',
+                    theory: `Define functions with def, then name and parentheses.  
+        Example: def hello(): print('Hi')`,
+                    example: 'def greet():\n    print("Hello")',
+                    task: 'Create a function greet that prints "Hello"',
+                    answer: 'def greet():\n    print("Hello")',
+                    hint: 'Use def',
+                    instruction: 'def greet():\n    print("Hello")'
+                }, {
+                    title: 'List []',
+                    theory: `Lists hold multiple items in square brackets.  
+        Example: fruits = ['apple', 'banana']`,
+                    example: '[5, 10, 15]',
+                    task: 'Create a list with numbers 5, 10, 15',
+                    answer: '[5, 10, 15]',
+                    hint: 'Use square brackets',
+                    instruction: '[5, 10, 15]'
+                }]
+            }
         };
-        // Полный код я выдам в следующем сообщении, так как здесь ограничение по длине.
-        // Но сейчас я должен дать пользователю полный готовый файл.
-        // Поскольку я не могу отправить здесь 500 строк кода полностью, я предложу пользователю скачать полный код.
-        // Но пользователь хочет, чтобы я дал его здесь. Я сгенерирую полный код и вставлю его, но он будет очень длинным.
-        // Чтобы не превысить лимит, я дам ссылку на pastebin или сокращу? Но пользователь просит "сделай новый код".
-        // Лучше я выдам полный код, даже если он длинный, но я постараюсь уместить.
-        // Я продолжу в следующем ответе, а здесь покажу пример кода и скажу, что полный код в следующем сообщении.
+
+        // ============================================================
+        //  STATE MANAGEMENT (lives, progress, navigation)
+        // ============================================================
+        let state = {
+            currentLang: 'html',
+            lessonIndex: { html: 0, css: 0, js: 0, python: 0 },
+            completed: { html: 0, css: 0, js: 0, python: 0 },
+            lives: 3,
+            lastLostTime: Date.now()
+        };
+
+        function loadState() {
+            try {
+                const saved = localStorage.getItem('learnState');
+                if (saved) state = { ...state, ...JSON.parse(saved) };
+            } catch (e) {}
+        }
+
+        function saveState() {
+            localStorage.setItem('learnState', JSON.stringify(state));
+        }
+
+        function updateLivesDisplay() {
+            document.getElementById('livesCount').textContent = state.lives;
+            const timerEl = document.getElementById('timerDisplay');
+            if (state.lives >= 3) {
+                timerEl.textContent = '✅ Max';
+                return;
+            }
+            const diff = 10 * 60 * 1000 - (Date.now() - state.lastLostTime);
+            if (diff <= 0) timerEl.textContent = '⏳ 0:00 (ready)';
+            else {
+                const m = Math.floor(diff / 60000);
+                const s = Math.floor((diff % 60000) / 1000);
+                timerEl.textContent = `⏳ ${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            }
+        }
+
+        function showFeedback(text, type = 'info') {
+            const fb = document.getElementById('feedback');
+            fb.textContent = text;
+            fb.className = 'feedback ' + type;
+        }
+
+        // ============================================================
+        //  RENDER LESSON
+        // ============================================================
+        let currentLessonObj = null;
+        let currentLessonIndex = 0;
+
+        function renderLesson(lang, index) {
+            const course = COURSES[lang];
+            if (!course) return;
+            const lessons = course.lessons;
+            if (index >= lessons.length) {
+                document.getElementById('lessonTitle').textContent = '🎉 Congratulations!';
+                document.getElementById('contentArea').innerHTML =
+                    `<div style="text-align:center;padding:20px;font-size:20px;">You completed all ${lessons.length} lessons of ${course.name}!<br>Great job! 💪</div>`;
+                document.getElementById('taskArea').classList.add('hidden');
+                document.getElementById('startBtn').style.display = 'none';
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('prevBtn').style.display = 'none';
+                document.getElementById('skipBtn').style.display = 'none';
+                document.getElementById('progressFill').style.width = '100%';
+                return;
+            }
+            currentLessonIndex = index;
+            currentLessonObj = lessons[index];
+            state.lessonIndex[lang] = index;
+            saveState();
+
+            // Build content: theory + code example
+            let htmlContent = `<div class="theory">${currentLessonObj.theory.replace(/\n/g, '<br>')}</div>`;
+            if (currentLessonObj.example) {
+                htmlContent += `<div class="code-example"><pre>${currentLessonObj.example}</pre></div>`;
+            }
+            document.getElementById('contentArea').innerHTML = htmlContent;
+
+            document.getElementById('taskArea').classList.remove('hidden');
+            document.getElementById('taskQuestion').textContent = '✏️ ' + currentLessonObj.task;
+            document.getElementById('taskInstruction').innerHTML = currentLessonObj.instruction.replace(/\n/g, '<br>');
+            document.getElementById('userInput').value = '';
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('nextBtn').style.display = 'block';
+            document.getElementById('prevBtn').style.display = 'block';
+            document.getElementById('skipBtn').style.display = 'block';
+            document.getElementById('startBtn').style.display = 'none';
+
+            const total = lessons.length;
+            const done = state.completed[lang] || 0;
+            document.getElementById('progressFill').style.width = Math.min(100, (done / total) * 100) + '%';
+
+            if (state.lives <= 0) {
+                document.getElementById('checkBtn').disabled = true;
+                document.getElementById('checkBtn').style.opacity = '0.5';
+                showFeedback('😵 No lives left! Wait 10 min or restore.', 'wrong');
+            } else {
+                document.getElementById('checkBtn').disabled = false;
+                document.getElementById('checkBtn').style.opacity = '1';
+            }
+        }
+
+        // ============================================================
+        //  NAVIGATION
+        // ============================================================
+        function selectLanguage(lang) {
+            state.currentLang = lang;
+            menuScreen.classList.add('hidden');
+            if (state.completed[lang] === 0 && state.lessonIndex[lang] === 0) {
+                const course = COURSES[lang];
+                document.getElementById('lessonTitle').textContent = `Introduction to ${course.name}`;
+                document.getElementById('contentArea').innerHTML =
+                    `<div class="intro-text">${course.intro.replace(/\n/g, '<br>')}</div>`;
+                document.getElementById('taskArea').classList.add('hidden');
+                document.getElementById('startBtn').style.display = 'block';
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('prevBtn').style.display = 'none';
+                document.getElementById('skipBtn').style.display = 'none';
+                document.getElementById('progressFill').style.width = '0%';
+            } else {
+                renderLesson(lang, state.lessonIndex[lang]);
+            }
+            updateLivesDisplay();
+        }
+
+        function startLearning() {
+            renderLesson(state.currentLang, state.lessonIndex[state.currentLang]);
+        }
+
+        function nextLesson() {
+            const lang = state.currentLang;
+            const nextIdx = state.lessonIndex[lang] + 1;
+            renderLesson(lang, nextIdx);
+        }
+
+        function prevLesson() {
+            const lang = state.currentLang;
+            const prevIdx = state.lessonIndex[lang] - 1;
+            if (prevIdx < 0) return;
+            renderLesson(lang, prevIdx);
+        }
+
+        function skipLesson() {
+            const lang = state.currentLang;
+            const idx = state.lessonIndex[lang];
+            if (idx >= (state.completed[lang] || 0)) {
+                state.completed[lang] = idx + 1;
+                saveState();
+            }
+            nextLesson();
+        }
+
+        function checkAnswer() {
+            if (state.lives <= 0) {
+                showFeedback('No lives! Restore or wait.', 'wrong');
+                return;
+            }
+            if (!currentLessonObj) return;
+            const userAns = document.getElementById('userInput').value.trim();
+            if (!userAns) {
+                showFeedback('✏️ Type your answer!', 'wrong');
+                return;
+            }
+            const normalize = s => s.replace(/\s+/g, ' ').trim();
+            if (normalize(userAns) === normalize(currentLessonObj.answer)) {
+                showFeedback('✅ Correct! Great job! 🎉', 'correct');
+                const lang = state.currentLang;
+                const idx = state.lessonIndex[lang];
+                if (idx >= (state.completed[lang] || 0)) {
+                    state.completed[lang] = idx + 1;
+                    saveState();
+                    const total = COURSES[lang].lessons.length;
+                    const done = state.completed[lang];
+                    document.getElementById('progressFill').style.width = Math.min(100, (done / total) * 100) + '%';
+                }
+            } else {
+                state.lives--;
+                state.lastLostTime = Date.now();
+                saveState();
+                updateLivesDisplay();
+                showFeedback(`❌ Wrong. Lives left: ${state.lives}`, 'wrong');
+                if (state.lives <= 0) {
+                    document.getElementById('checkBtn').disabled = true;
+                    document.getElementById('checkBtn').style.opacity = '0.5';
+                }
+            }
+        }
+
+        function showHint() {
+            if (currentLessonObj) showFeedback('💡 ' + currentLessonObj.hint, 'info');
+        }
+
+        function toggleReveal() {
+            if (!currentLessonObj) return;
+            const fb = document.getElementById('feedback');
+            if (fb.textContent.includes(currentLessonObj.answer)) {
+                fb.textContent = '';
+                fb.className = 'feedback';
+            } else {
+                fb.textContent = '✅ Correct answer: ' + currentLessonObj.answer;
+                fb.className = 'feedback correct';
+            }
+        }
+
+        function restoreLife() {
+            if (state.lives >= 3) {
+                showFeedback('Already max lives', 'info');
+                return;
+            }
+            state.lives++;
+            state.lastLostTime = Date.now();
+            saveState();
+            updateLivesDisplay();
+            showFeedback('❤️ Life restored!', 'correct');
+        }
+
+        function goToMenu() {
+            menuScreen.classList.remove('hidden');
+        }
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        loadState();
+        updateLivesDisplay();
+        selectLanguage('html');
+
+        // Auto-restore timer
+        setInterval(() => {
+            if (state.lives < 3 && (Date.now() - state.lastLostTime) >= 10 * 60 * 1000) {
+                state.lives++;
+                state.lastLostTime = Date.now();
+                saveState();
+                updateLivesDisplay();
+                showFeedback('❤️ Life auto-restored!', 'info');
+            }
+            updateLivesDisplay();
+        }, 1000);
+
+        // Event listeners
+        document.querySelectorAll('.menu-btn').forEach(btn => {
+            btn.addEventListener('click', () => selectLanguage(btn.dataset.lang));
+        });
+        document.getElementById('backBtn').addEventListener('click', goToMenu);
+        document.getElementById('checkBtn').addEventListener('click', checkAnswer);
+        document.getElementById('hintBtn').addEventListener('click', showHint);
+        document.getElementById('revealBtn').addEventListener('click', toggleReveal);
+        document.getElementById('nextBtn').addEventListener('click', nextLesson);
+        document.getElementById('prevBtn').addEventListener('click', prevLesson);
+        document.getElementById('skipBtn').addEventListener('click', skipLesson);
+        document.getElementById('startBtn').addEventListener('click', startLearning);
+        document.getElementById('restoreBtn').addEventListener('click', restoreLife);
+        document.getElementById('userInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkAnswer();
+        });
     </script>
 </body>
 </html>
